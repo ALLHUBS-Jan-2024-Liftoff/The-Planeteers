@@ -14,6 +14,7 @@ public class Score extends AbstractEntity{
     @ManyToOne
     private User user;
 
+    //getter and setter
     public Score(int score) {
         this.score = score;
     }
