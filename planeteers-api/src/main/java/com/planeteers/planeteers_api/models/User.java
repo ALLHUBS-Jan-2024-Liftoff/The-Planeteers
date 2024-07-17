@@ -17,15 +17,17 @@ import java.util.List;
 public class User extends AbstractEntity{
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+
+    @Size(max = 100)
+    @NotNull(message = "Cannot be blank")
+    private String name;
     @Email
     @NotNull
     private String email;
     @NotNull
     @Min(value= 13, message = "Must be over 13 to play")
     private int age;
-    @Size(max = 100)
-    @NotNull(message = "Cannot be blank")
-    private String name;
+
 
     @NotNull
     private String pwHash;
@@ -43,7 +45,7 @@ public class User extends AbstractEntity{
 
     public User () {}
 
-    public User(String email, int age, String password) {
+    public User(String name, String email, int age, String password) {
         super ();
         this.email = email;
         this.age = age;
