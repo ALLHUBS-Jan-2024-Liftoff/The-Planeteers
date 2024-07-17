@@ -15,33 +15,12 @@ public abstract class AbstractEntity {
     @GeneratedValue
     private int id;
 
-    @Size(max = 100)
-    @NotNull(message = "Cannot be blank")
-    private String firstName;
 
-    @Size(max = 100)
-    @NotNull(message = "Cannot be blank")
-    private String lastName;
 
     public int getId() {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     @Override
     public boolean equals(Object o) {
