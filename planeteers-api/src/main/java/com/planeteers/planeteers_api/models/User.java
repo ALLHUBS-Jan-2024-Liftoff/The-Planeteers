@@ -1,9 +1,6 @@
 package com.planeteers.planeteers_api.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +15,6 @@ public class User extends AbstractEntity{
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 
-    @Size(max = 100)
     @NotNull(message = "Cannot be blank")
     private String name;
     @Email
@@ -28,15 +24,16 @@ public class User extends AbstractEntity{
     @Min(value= 13, message = "Must be over 13 to play")
     private int age;
 
-
+    @Size(min = 8, message = "Password must be 8 characters long")
     @NotNull
     private String pwHash;
     @OneToMany
     @JoinColumn(name = "user_id")
     private final List<Score> scores = new ArrayList<>();
 
-    @OneToOne
-    private final List<Credit> credits = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "credit_id", referencedColumnName = "id")
+    private Credit credit;
 
 
     @OneToMany
@@ -47,6 +44,7 @@ public class User extends AbstractEntity{
 
     public User(String name, String email, int age, String password) {
         super ();
+        this.name = name;
         this.email = email;
         this.age = age;
         this.pwHash = encoder.encode(password);
@@ -87,5 +85,17 @@ public class User extends AbstractEntity{
         this.age = age;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", pwHash='" + pwHash + '\'' +
+                ", scores=" + scores +
+                ", credit=" + credit +
+                ", comments=" + comments +
+                '}';
+    }
 
 }
