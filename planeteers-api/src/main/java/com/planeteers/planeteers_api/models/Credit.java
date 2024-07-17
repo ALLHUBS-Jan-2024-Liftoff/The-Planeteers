@@ -10,10 +10,10 @@ public class Credit extends AbstractEntity{
 
     private int coin;
 
-    @OneToOne
+    @OneToOne(mappedBy = "credit")
     private User user;
 
-    public Credit (){}
+    public Credit() {}
 
     public Credit(int coin) {
         this.coin = coin;
@@ -25,5 +25,13 @@ public class Credit extends AbstractEntity{
 
     public void setCoin(int coin) {
         this.coin = coin;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
