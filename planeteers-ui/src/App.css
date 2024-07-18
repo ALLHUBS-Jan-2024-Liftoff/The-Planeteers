@@ -8,7 +8,8 @@ body {
   background-image: linear-gradient(79deg, #298d9e, #65611e 48%, #ebfff0);
 }
 header{
-  top: 0;
+  position: sticky;
+  top: 0%;
   left: 0;
   width: 100%;
   background-color: #333;
