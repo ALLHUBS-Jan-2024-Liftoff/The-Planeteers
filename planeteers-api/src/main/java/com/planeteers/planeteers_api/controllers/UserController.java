@@ -25,25 +25,27 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/")
-    public User index(){
-        return (User) userRepository.findAll();
+    public List<User> index(){
+        return userRepository.findAll();
     }
 
     @PostMapping("create")
-    public ResponseEntity<?> createUser(@ModelAttribute @Valid User user, Errors errors){
-        if (errors.hasErrors()){
+    public ResponseEntity<?> createUser(@RequestBody @Valid User user, Errors errors){
+        if (errors.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : errors.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
             }
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(errorMessages);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
-        userRepository.save(user);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(user);
+
+        try {
+            userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while creating the user.");
+        }
     }
 
 }
