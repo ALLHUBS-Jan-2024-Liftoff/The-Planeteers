@@ -1,6 +1,7 @@
 package com.planeteers.planeteers_api.models;
 
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,8 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class AbstractEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private int id;
 
 
