@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 
 export const Login = (props) => {
     const [email, setEmail] = useState('');
@@ -23,8 +24,10 @@ export const Login = (props) => {
                 <button>Log in</button>
 
             </form>
-            <button onClick={() => props.onFormSwitch('register')}>Register here</button>
-            <button>Forgot Password?</button>
+            <Link to="/register">
+                <button type="button">Register here</button>
+            </Link>
+            <button className = 'button'>Forgot Password?</button>
             <img src="https://www.dropbox.com/scl/fi/nekcsfp5w9ilj8m2y4a8c/house-of-cards.jpg?rlkey=44v72v56nidvs7o3je7kq1r8q&st=6b27e26t&raw=1" alt="House of Cards" />
         </div>
     )
