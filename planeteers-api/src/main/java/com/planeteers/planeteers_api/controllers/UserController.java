@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("user")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-//    @GetMapping("/")
-//    public List<User> index(){
-//        return userRepository.findAll();
-//    }
-//
+    @GetMapping("/")
+    public List<User> index() {
+        return userService.getAllUsers();
+    }
     @PostMapping("create")
     public ResponseEntity<?> createUser(@RequestBody @Valid User user, Errors errors){
         if (errors.hasErrors()) {
@@ -48,12 +48,24 @@ public class UserController {
                     .body("An error occurred while creating the user.");
         }
     }
-
-
-
-    @GetMapping("/getAll")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id");
+        }
     }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editUser(@PathVariable int id, @RequestBody @Valid User user) {
+        Optional<User> updatedUser = userService.updateUser(id, user);
+        if (updatedUser.isPresent()) {
+            return ResponseEntity.ok(updatedUser.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id: " + id);
+        }
+    }
+
 
 }

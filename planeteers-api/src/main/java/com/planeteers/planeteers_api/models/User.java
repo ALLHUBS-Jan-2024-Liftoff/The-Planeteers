@@ -59,8 +59,8 @@ public class User extends AbstractEntity{
         return pwHash;
     }
 
-    public void setPwHash(String pwHash) {
-        this.pwHash = pwHash;
+    public void setPwHash(String password) {
+        this.pwHash = encoder.encode(password);
     }
 
     public String getName() {
