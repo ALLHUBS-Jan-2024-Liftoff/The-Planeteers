@@ -21,6 +21,15 @@ function App() {
                     <Route path ="/login"  element={<Login />} />
                     <Route path ="/register"  element={<Register />} />
                     <Route path ="/home"  element={<Home />} />
+{/* Uncomment once pages are completed */}
+{/*                 <Route path ="/contact"  element={<Contact />} /> */}
+{/*                 <Route path ="/profile"  element={<Profile />} /> */}
+{/*                 <Route path ="/gameofwar"  element={<GameOfWar />} /> */}
+{/*                 <Route path ="/solitaire"  element={<Solitaire />} /> */}
+{/*                 <Route path ="/cardmatch"  element={<CardMatch />} /> */}
+{/*                 <Route path ="/blackjack"  element={<Blackjack />} /> */}
+
+
 
                 </Routes>
             </BrowserRouter>
