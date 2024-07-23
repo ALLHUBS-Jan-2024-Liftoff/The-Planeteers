@@ -3,6 +3,7 @@ package com.planeteers.planeteers_api.controllers;
 
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
+import com.planeteers.planeteers_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,19 +17,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
-@RequestMapping("user")
+@RestController
+@RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    @GetMapping("/")
-    public List<User> index(){
-        return userRepository.findAll();
-    }
-
+//    @GetMapping("/")
+//    public List<User> index(){
+//        return userRepository.findAll();
+//    }
+//
     @PostMapping("create")
     public ResponseEntity<?> createUser(@RequestBody @Valid User user, Errors errors){
         if (errors.hasErrors()) {
@@ -40,12 +41,19 @@ public class UserController {
         }
 
         try {
-            userRepository.save(user);
+            userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while creating the user.");
         }
+    }
+
+
+
+    @GetMapping("/getAll")
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
     }
 
 }

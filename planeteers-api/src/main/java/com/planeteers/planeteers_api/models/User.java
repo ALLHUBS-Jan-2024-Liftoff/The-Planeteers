@@ -17,9 +17,11 @@ public class User extends AbstractEntity{
 
     @NotNull(message = "Cannot be blank")
     private String name;
+    
     @Email
     @NotNull
     private String email;
+
     @NotNull
     @Min(value= 13, message = "Must be over 13 to play")
     private int age;
@@ -27,6 +29,7 @@ public class User extends AbstractEntity{
     @Size(min = 8, message = "Password must be 8 characters long")
     @NotNull
     private String pwHash;
+
     @OneToMany
     @JoinColumn(name = "user_id")
     private final List<Score> scores = new ArrayList<>();
@@ -34,7 +37,6 @@ public class User extends AbstractEntity{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_id", referencedColumnName = "id")
     private Credit credit;
-
 
     @OneToMany
     @JoinColumn(name = "user_id")
