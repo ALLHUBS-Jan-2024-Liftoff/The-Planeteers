@@ -17,7 +17,7 @@ public class User extends AbstractEntity{
 
     @NotNull(message = "Cannot be blank")
     private String name;
-    
+
     @Email
     @NotNull
     private String email;
@@ -42,7 +42,7 @@ public class User extends AbstractEntity{
     @JoinColumn(name = "user_id")
     private final List<Comment> comments = new ArrayList<>();
 
-    public User () {}
+    public User (String email, String password) {}
 
     public User(String name, String email, int age, String password) {
         super ();
@@ -100,5 +100,9 @@ public class User extends AbstractEntity{
                 ", comments=" + comments +
                 '}';
     }
+    public boolean isMatchingPassword(String password) {
+        return encoder.matches(password, pwHash);
+    }
+
 
 }

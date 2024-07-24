@@ -2,6 +2,7 @@ package com.planeteers.planeteers_api.service;
 
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +49,11 @@ public class UserServiceImpl implements UserService{
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public User findByEmail(String email) {
+
+        return userRepository.findByEmail(email);
     }
 }

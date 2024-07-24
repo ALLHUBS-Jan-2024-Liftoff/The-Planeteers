@@ -1,11 +1,29 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 
 export const Login = (props) => {
     const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
+    const [pwHash, setPwHash] = useState('');
     
     const handleSubmit = (e) => {
         e.preventDefault();
+    }
+
+    function sendLoginRequest(){
+
+        const userLogin = { email, pwHash }
+    
+        fetch("http://localhost:8080/user/login", { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            body: JSON.stringify(userLogin)
+        }).then(() => {
+            console.log("Sucessfully login");
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     }
 
     return (
@@ -18,13 +36,15 @@ export const Login = (props) => {
                 <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email" />
                 
                 <label htmlFor="pass"> Password: </label>
-                <input defaultValue={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="******" id="password" name="password" />
+                <input defaultValue={pwHash} onChange={(e) => setPwHash(e.target.value)} type="password" placeholder="******" id="password" name="password" />
 
-                <button>Log in</button>
+                <button id="submit" onClick={()=>sendLoginRequest()}>Log in</button>
 
             </form>
-            <button onClick={() => props.onFormSwitch('register')}>Register here</button>
-            <button>Forgot Password?</button>
+            <Link to="/register">
+                <button type="button">Register here</button>
+            </Link>
+            <button className = 'button'>Forgot Password?</button>
             <img src="https://www.dropbox.com/scl/fi/nekcsfp5w9ilj8m2y4a8c/house-of-cards.jpg?rlkey=44v72v56nidvs7o3je7kq1r8q&st=6b27e26t&raw=1" alt="House of Cards" />
         </div>
     )

@@ -20,4 +20,6 @@ public interface UserService {
 
     Optional<User> updateUser(int id, User user);
 
+    User findByEmail(String email);
+
 }
