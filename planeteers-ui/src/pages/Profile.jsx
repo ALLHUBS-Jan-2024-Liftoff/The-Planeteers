@@ -1,7 +1,7 @@
 import './Profile.css'
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 
-const Content = () => {
+const Profile = () => {
     const tabs = ['Account Settings', 'Achievements', 'Comments']
   
     return (
@@ -36,7 +36,7 @@ const Content = () => {
               </Tab>
             ))}
           </TabList>
-  
+            
           <TabPanels px={3} mt={5}>
             <TabPanel>
               <AccountSettings />
@@ -49,7 +49,7 @@ const Content = () => {
             </TabPanel>
           </TabPanels>
         </Tabs>
-  
+        //need to add working funtions
         <Actions />
       </Box>
     )
