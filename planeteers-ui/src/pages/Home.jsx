@@ -19,7 +19,7 @@ function Home() {
   			<div>Game 4</div>
         </div>
         <div class = "footer">
-            <p>Contact Us<p>
+            <p>Contact Us</p>
         </div>
     </div>
     )
