@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 
 export const Register = (props) => {
     const [email, setEmail] = useState('');
@@ -55,7 +56,12 @@ export const Register = (props) => {
                 
                 <button onClick={handleSubmit}>Submit</button>
             </form>
-            <button onClick={() => props.onFormSwitch('login')}>Already have account? Log in here!</button>
+             <Link to="/login">
+                 <button type="button">
+                      Already have account? Log in here!
+                 </button>
+             </Link>
+{/*             <button onClick={() => props.onFormSwitch('login')}>Already have account? Log in here!</button> */}
         </div>
     )
 }

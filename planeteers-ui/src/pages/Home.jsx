@@ -1,7 +1,7 @@
 import './Home.css'
+import { useState } from "react";
 
-
-function Home() {
+export default function Home() {
     return (
     <div>
         <div class = "navbar">
@@ -25,4 +25,3 @@ function Home() {
     )
 }
 
-export default Home;
