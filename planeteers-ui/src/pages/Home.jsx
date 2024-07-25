@@ -1,7 +1,7 @@
 import './Home.css'
+import { useState } from "react";
 
-
-function Home() {
+export default function Home() {
     return (
     <div>
         <div class = "navbar">
@@ -19,10 +19,9 @@ function Home() {
   			<div>Game 4</div>
         </div>
         <div class = "footer">
-            <p>Contact Us<p>
+            <p>Contact Us</p>
         </div>
     </div>
     )
 }
 
-export default Home;
