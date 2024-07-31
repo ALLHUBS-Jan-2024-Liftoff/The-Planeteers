@@ -87,6 +87,9 @@ public class User extends AbstractEntity{
         this.age = age;
     }
 
+    public boolean isMatchingPassword(String password) {
+        return encoder.matches(password, pwHash);}
+
     @Override
     public String toString() {
         return "User{" +

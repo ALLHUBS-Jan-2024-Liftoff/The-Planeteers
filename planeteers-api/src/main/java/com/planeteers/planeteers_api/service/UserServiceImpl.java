@@ -3,6 +3,7 @@ package com.planeteers.planeteers_api.service;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UserRepository userRepository;
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService{
             currentUser.setAge(user.getAge());
             currentUser.setEmail(user.getEmail());
             if (user.getPwHash() != null && !user.getPwHash().isEmpty()) {
-                currentUser.setPwHash(user.getPwHash());
+                currentUser.setPwHash(encoder.encode(user.getPwHash()));
             }
             userRepository.save(currentUser);
             return Optional.of(currentUser);
