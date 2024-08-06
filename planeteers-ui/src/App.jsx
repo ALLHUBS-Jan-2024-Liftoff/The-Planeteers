@@ -4,6 +4,7 @@ import './App.css'
 import { Login } from './components/Users/Login'
 import { Register } from './components/Users/Register'
 import Home from './pages/Home'
+
 function App() {
   const [currentForm, setCurrentForm] = useState('login')
 

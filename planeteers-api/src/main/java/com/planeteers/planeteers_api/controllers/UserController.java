@@ -96,7 +96,7 @@ public class UserController {
         return new ResponseEntity<>(authResponse,HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<?> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
@@ -105,7 +105,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id");
         }
     }
-    @PutMapping("/edit/{id}")
+    @PutMapping("edit/{id}")
     public ResponseEntity<?> editUser(@PathVariable int id, @RequestBody @Valid User user) {
         Optional<User> updatedUser = userService.updateUser(id, user);
         if (updatedUser.isPresent()) {
@@ -136,6 +136,12 @@ public class UserController {
         }
         return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 
+    }
+
+
+    @GetMapping("currentusername")
+    public String currentUserName(Authentication authentication) {
+        return authentication.getName();
     }
 
 

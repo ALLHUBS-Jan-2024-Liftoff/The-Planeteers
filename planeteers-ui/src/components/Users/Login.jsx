@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios'; 
 import { Link } from 'react-router-dom'; 
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 import { 
     MDBContainer, 
     MDBInput, 
@@ -23,8 +24,10 @@ export const Login = (props) => {
             } 
   
             const response = await axios.post('/api/user/login', { email, pwHash }); 
-            console.log('Login successful:', response.data); 
-            history('/home'); 
+            console.log('Login successful:', response.data);
+            const token = response.data.token; // Assuming the token is returned in the response
+            Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+            history('/home', { state: { username: email } }); 
         } catch (error) { 
             console.error('Login failed:', error.response ? error.response.data : error.message); 
             setError('Invalid username or password.'); 
@@ -32,13 +35,15 @@ export const Login = (props) => {
     }; 
 
     return (
-        <div className="auth-form-container" >
-
+        <div className="d-flex justify-content-center align-items-center vh-100"> 
+            <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}> 
             <header>House of Cards</header>
+
+                <MDBContainer className="p-3"> 
+                    <h2 className="mb-4 text-center">Sign Up Page</h2> 
             
-            <MDBContainer className="p-3"> 
-                    <MDBInput wrapperClass='mb-4' placeholder='Email address' id='email' value={email} type='email' onChange={(e) => setEmail(e.target.value)} /> 
-                    <MDBInput wrapperClass='mb-4' placeholder='Password' id='password' type='password' value={pwHash} onChange={(e) => setPwHash(e.target.value)} /> 
+                    <MDBInput wrapperClass='mb-3' placeholder='Email address' id='email' value={email} type='email' onChange={(e) => setEmail(e.target.value)} /> 
+                    <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={pwHash} onChange={(e) => setPwHash(e.target.value)} /> 
                     {error && <p className="text-danger">{error}</p>} {/* Render error message if exists */} 
                     <button className="mb-4 d-block btn-primary" style={{ height:'50px',width: '100%' }} onClick={handleLogin}>Sign in</button> 
                     <div>
@@ -50,6 +55,7 @@ export const Login = (props) => {
 
                     </div> 
             </MDBContainer> 
+         </div>
          </div>
         )
     }   

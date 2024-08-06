@@ -3,7 +3,10 @@ package com.planeteers.planeteers_api.service;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -90,6 +93,17 @@ public class UserServiceImpl implements UserService{
             return Optional.of(currentUser);
         } catch (Exception e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public String currentUser(String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            return authentication.getName(); // Return the current user's username
+        } else {
+            throw new RuntimeException("No User"); // Throw an exception if no user is authenticated
         }
     }
 }
