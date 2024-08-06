@@ -3,8 +3,12 @@ package com.planeteers.planeteers_api.service;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +19,47 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username);
+        System.out.println(user);
+
+        if(user==null) {
+            throw new UsernameNotFoundException("User not found with this email"+username);
+
+        }
+
+
+        System.out.println("Loaded user: " + user.getEmail());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPwHash(),
+                authorities);
+    }
+
+    @Override
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findUserProfileByJwt(String jwt) {
+        return null;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public User findUserById(String userId) {
+        return null;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return List.of();
     }
 
     @Override

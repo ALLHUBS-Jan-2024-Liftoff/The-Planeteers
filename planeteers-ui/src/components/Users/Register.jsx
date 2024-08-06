@@ -1,11 +1,22 @@
-import { useState } from "react";
-import { Link } from "react-router-dom"
+
+import React, { useState } from 'react'; 
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'; 
+import { Link } from 'react-router-dom'; // Import useHistory hook 
+import { 
+    MDBContainer, 
+    MDBInput, 
+    MDBBtn, 
+} from 'mdb-react-ui-kit';
 
 export const Register = (props) => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
+    const [confirmPwHash, setConfirmPwHash] = useState(''); 
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
+    const [error, setError] = useState(''); // State to manage error messages 
+    const history = useNavigate();
 
     const onChange = (e) => {
         const currentYear = new Date().getFullYear();
@@ -16,52 +27,65 @@ export const Register = (props) => {
 
     }
     
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const user = { name, email, age, pwHash };
-        console.log(user);
-    
-        fetch("http://localhost:8080/user/create", { 
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8"
-            },
-            body: JSON.stringify(user)
-        }).then(() => {
-            console.log("New User added");
-        }).catch(error => {
-            console.error('Error:', error);
-        });
-    };
+    const handleSubmit = async () => { 
+        try { 
+            // Check for empty fields 
+            if (!name || !email || !age || !pwHash || !confirmPwHash ) { 
+                setError('Please fill in all fields.'); 
+                return; 
+            } 
+  
+            if (pwHash !== confirmPwHash) { 
+                throw new Error("Passwords do not match"); 
+            } 
+  
+            const response = await axios.post('/api/user/create', { 
+                name,
+                email,
+                age,
+                pwHash
+            }); 
+            // Handle successful signup 
+            console.log(response.data); 
+            history('/home'); 
+        } catch (error) { 
+            // Handle signup error 
+            console.error('Signup failed:', error.response ? error.response.data : error.message); 
+            setError(error.response ? error.response.data : error.message); 
+        } 
+    }; 
 
     return (
         <div className="auth-form-container" >
-
+            <MDBContainer className="p-3"> 
             <header>House of Cards</header>
 
-            <form onSubmit={handleSubmit}>
+            {error && <p className="text-danger">{error}</p>} 
+                    <MDBInput wrapperClass='mb-3' id='name' placeholder={"Full Name"} value={name} type='text'
+                              onChange={(e) => setName(e.target.value)}/> 
+                    <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
+                              onChange={(e) => setEmail(e.target.value)}/> 
+                     <MDBInput wrapperClass='mb-3' placeholder='age' id='age' type='date' defaultValue={age} 
+                              onChange={onChange}/>          
+                    <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={pwHash} 
+                              onChange={(e) => setPwHash(e.target.value)}/>
+                    <MDBInput wrapperClass='mb-3' placeholder='Confirm Password' id='confirmPwHash' type='password'
+                              value={confirmPwHash} 
+                              onChange={(e) => setConfirmPwHash(e.target.value)}/> 
+  
 
-                <label htmlFor="name"> Name: </label>
-                <input defaultValue={name} onChange={(e) => setName(e.target.value)} type="name" placeholder="Full Name" id="name" name="name" />
-                
-
-                <label htmlFor="email"> Email: </label>
-                <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email" />
-
-                <label htmlFor="pwHash"> Password: </label>
-                <input defaultValue={pwHash} onChange={(e) => setPwHash(e.target.value)} type="password" placeholder="******" id="password" name="password" />
-                
-                <label htmlFor="age"> Age: </label>
-                <input defaultValue={age} type="date" placeholder="mm/dd/yyyy" id="age" name="age" onChange={onChange} />
-                
-                <button onClick={handleSubmit}>Submit</button>
-            </form>
-             <Link to="/login">
+                    <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
+                            style={{height: '40px', width: '100%'}} 
+                            onClick={handleSubmit}>Sign Up 
+                    </button> 
+  
+                    <Link to="/login">
                  <button type="button">
                       Already have account? Log in here!
                  </button>
-             </Link>
-{/*             <button onClick={() => props.onFormSwitch('login')}>Already have account? Log in here!</button> */}
-        </div>
-    )
-}
+                </Link>
+                </MDBContainer> 
+            </div> 
+    ); 
+} 
+  

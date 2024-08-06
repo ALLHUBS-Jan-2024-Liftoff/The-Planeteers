@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import './App.css'
 import { Login } from './components/Users/Login'
 import { Register } from './components/Users/Register'
 import Home from './pages/Home'
-import { BrowserRouter, Routes, Route} from "react-router-dom";
 function App() {
   const [currentForm, setCurrentForm] = useState('login')
 
@@ -15,7 +13,7 @@ function App() {
 
   return (
        <div className='App'>
-            <BrowserRouter>
+            <Router>
                 <Routes>
                     <Route index element={<Login />} />
                     <Route path ="/login"  element={<Login />} />
@@ -32,7 +30,7 @@ function App() {
 
 
                 </Routes>
-            </BrowserRouter>
+            </Router>
        </div>
   );
 }
