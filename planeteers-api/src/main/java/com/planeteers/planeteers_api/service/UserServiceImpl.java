@@ -2,14 +2,15 @@ package com.planeteers.planeteers_api.service;
 
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
+import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,14 +97,17 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    @Override
-    public String currentUser(String username) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            return authentication.getName(); // Return the current user's username
-        } else {
-            throw new RuntimeException("No User"); // Throw an exception if no user is authenticated
-        }
+//    @Override
+//    public String getUserName() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//            String currentUserName = authentication.getName();
+//            return currentUserName;
+//        }else{
+//            throw RuntimeException("No User")
+//        }
+//
+//    public String getCurrentUserEmail() {
+//        return getUserName();
+//    }
     }
-}

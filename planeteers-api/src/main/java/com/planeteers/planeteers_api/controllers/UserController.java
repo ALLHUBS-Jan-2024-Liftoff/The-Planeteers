@@ -7,10 +7,13 @@ import com.planeteers.planeteers_api.response.AuthResponse;
 import com.planeteers.planeteers_api.securityConfig.JwtProvider;
 import com.planeteers.planeteers_api.service.UserService;
 import com.planeteers.planeteers_api.service.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,8 +47,10 @@ public class UserController {
     public List<User> index() {
         return userService.getAllUsers();
     }
+
+
     @PostMapping("create")
-    public ResponseEntity<AuthResponse> createUser(@RequestBody @Valid User user){
+    public ResponseEntity<AuthResponse> createUser(@RequestBody @Valid User user) {
         String email = user.getEmail();
         String password = user.getPwHash();
         String fullName = user.getName();
@@ -63,7 +69,8 @@ public class UserController {
 
         User savedUser = userRepository.save(createdUser);
         userRepository.save(savedUser);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email,password);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = JwtProvider.generateToken(authentication);
 
@@ -77,14 +84,19 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest) {
+    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest,  HttpServletRequest request) {
         String username = loginRequest.getEmail();
         String password = loginRequest.getPwHash();
 
-        System.out.println(username+"-------"+password);
+        System.out.println(username + "-------" + password);
 
-        Authentication authentication = authenticate(username,password);
+        Authentication authentication = authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDetails authenticatedUser = (UserDetails) authentication.getPrincipal();
+
+        HttpSession session = request.getSession();
+        session.setAttribute("currentUser", authenticatedUser);
 
         String token = JwtProvider.generateToken(authentication);
         AuthResponse authResponse = new AuthResponse();
@@ -93,7 +105,7 @@ public class UserController {
         authResponse.setJwt(token);
         authResponse.setStatus(true);
 
-        return new ResponseEntity<>(authResponse,HttpStatus.OK);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -105,6 +117,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id");
         }
     }
+
     @PutMapping("edit/{id}")
     public ResponseEntity<?> editUser(@PathVariable int id, @RequestBody @Valid User user) {
         Optional<User> updatedUser = userService.updateUser(id, user);
@@ -117,32 +130,42 @@ public class UserController {
 
     private Authentication authenticate(String username, String password) {
 
-        System.out.println(username+"---++----"+password);
+        System.out.println(username + "---++----" + password);
 
         UserDetails userDetails = customUserDetails.loadUserByUsername(username);
 
-        System.out.println("Sig in in user details"+ userDetails);
+        System.out.println("Sig in in user details" + userDetails);
 
-        if(userDetails == null) {
+        if (userDetails == null) {
             System.out.println("Sign in details - null" + userDetails);
 
             throw new BadCredentialsException("Invalid username and password");
         }
-        if(!passwordEncoder.matches(password,userDetails.getPassword())) {
-            System.out.println("Sign in userDetails - password mismatch"+userDetails);
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            System.out.println("Sign in userDetails - password mismatch" + userDetails);
 
             throw new BadCredentialsException("Invalid password");
 
         }
-        return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
     }
 
 
-    @GetMapping("currentusername")
-    public String currentUserName(Authentication authentication) {
-        return authentication.getName();
+    @GetMapping("currentUser")
+    public User currentUser(HttpSession session) {
+        // Retrieve the current user from the session
+        UserDetails authenticatedUser = (UserDetails) session.getAttribute("currentUser");
+
+        if (authenticatedUser == null) {
+            throw new RuntimeException("No user is currently logged in");
+        }
+
+        // You may need to convert UserDetails to your User entity or return necessary user info
+        User user = userRepository.findByEmail(authenticatedUser.getUsername());
+
+        return user;
     }
-
-
 }
+
+

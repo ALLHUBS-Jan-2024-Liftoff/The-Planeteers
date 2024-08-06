@@ -2,6 +2,8 @@ package com.planeteers.planeteers_api.service;
 
 
 import com.planeteers.planeteers_api.models.User;
+import com.planeteers.planeteers_api.models.data.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,5 @@ public interface UserService {
 
     Optional<User> updateUser(int id, User user);
 
-    public String currentUser(String username);
-
-
+//    public String currentUser(String username);
 }
