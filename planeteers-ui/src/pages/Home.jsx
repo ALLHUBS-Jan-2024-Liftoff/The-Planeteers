@@ -1,14 +1,23 @@
 import './Home.css'
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 
-export default function Home(username) {
+// import Cookies from 'js-cookie';
+
+export default function Home() {
     const history = useNavigate(); 
+    let location = useLocation();
+
+    console.log('Location State:', location.state);
+
+
+    const username = location.state?.username || "Guest" ;
   
     const handleLogout = () => { 
         // Perform logout actions here (e.g., clear session, remove authentication token) 
         // After logout, redirect to the login page 
+        Cookies.remove('token');
         history('/'); 
     }; 
     return (
@@ -18,8 +27,9 @@ export default function Home(username) {
             <ul>
                 <li>Home</li>
                 <li>Profile</li>
-                <li>Sign Out</li>
-            </ul>
+                <li>Welcome {username}</li>
+                <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button> 
+                </ul>
         </div>
        	<div class="games">
           	<div>Game 1</div>
@@ -29,7 +39,6 @@ export default function Home(username) {
         </div>
         <div class = "footer">
             <p>Contact Us</p>
-            <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button> 
         </div>
     </div>
     )

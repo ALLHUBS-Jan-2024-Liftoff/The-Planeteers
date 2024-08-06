@@ -33,4 +33,7 @@ public class AuthResponse {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
+
+
 }
