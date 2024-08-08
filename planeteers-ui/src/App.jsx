@@ -7,6 +7,12 @@ import { Register } from './components/Users/Register'
 import Home from './pages/Home'
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import GamePage  from './pages/GamePage'
+import Blackjack  from './pages/Blackjack'
+import CardMatch  from './pages/CardMatch'
+import GameOfWar  from './pages/GameOfWar'
+import Solitaire  from './pages/Solitaire'
+
+
 
 function App() {
   const [currentForm, setCurrentForm] = useState('login')
@@ -27,10 +33,10 @@ function App() {
 {/* Uncomment once pages are completed */}
 {/*                 <Route path ="/contact"  element={<Contact />} /> */}
 {/*                 <Route path ="/profile"  element={<Profile />} /> */}
-{/*                 <Route path ="/gameofwar"  element={<GameOfWar />} /> */}
-{/*                 <Route path ="/solitaire"  element={<Solitaire />} /> */}
-{/*                 <Route path ="/cardmatch"  element={<CardMatch />} /> */}
-{/*                 <Route path ="/blackjack"  element={<Blackjack />} /> */}
+                  <Route path ="/gameofwar"  element={<GameOfWar />} />
+                  <Route path ="/solitaire"  element={<Solitaire />} />
+                  <Route path ="/cardmatch"  element={<CardMatch />} />
+                  <Route path ="/blackjack"  element={<Blackjack />} /> 
 
 
 
