@@ -1,5 +1,6 @@
 package com.planeteers.planeteers_api.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -38,8 +39,8 @@ public class User extends AbstractEntity{
     @JoinColumn(name = "credit_id", referencedColumnName = "id")
     private Credit credit;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private final List<Comment> comments = new ArrayList<>();
 
     public User () {}
@@ -87,17 +88,33 @@ public class User extends AbstractEntity{
         this.age = age;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<Score> getScores() {
+        return scores;
+    }
+
+    public Credit getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Credit credit) {
+        this.credit = credit;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                " id '" + getId() + '\'' +
+                " id='" + getId() + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 ", pwHash='" + pwHash + '\'' +
-                ", scores=" + scores +
-                ", credit=" + credit +
-                ", comments=" + comments +
+                ", scores=" + scores.size() +
+                ", credit=" + (credit != null ? credit.getId() : null) +
+                ", comments=" + comments.size() +
                 '}';
     }
 
