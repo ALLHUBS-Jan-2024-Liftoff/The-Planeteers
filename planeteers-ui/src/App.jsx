@@ -6,6 +6,8 @@ import { Login } from './components/Users/Login'
 import { Register } from './components/Users/Register'
 import Home from './pages/Home'
 import { BrowserRouter, Routes, Route} from "react-router-dom";
+import GamePage  from './pages/GamePage'
+
 function App() {
   const [currentForm, setCurrentForm] = useState('login')
 
@@ -21,6 +23,7 @@ function App() {
                     <Route path ="/login"  element={<Login />} />
                     <Route path ="/register"  element={<Register />} />
                     <Route path ="/home"  element={<Home />} />
+                    <Route path ="/gamepage"  element={<GamePage />} />
 {/* Uncomment once pages are completed */}
 {/*                 <Route path ="/contact"  element={<Contact />} /> */}
 {/*                 <Route path ="/profile"  element={<Profile />} /> */}

@@ -3,8 +3,8 @@ body{
 }
 
 .navbar {
-    margin: auto;
-    padding: 35px 0;
+    position: static;
+    padding: 5px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -20,7 +20,6 @@ body{
 .games {
   width: 1366px;
   height: 768px;
-
   display: grid;
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(2, 1fr);
