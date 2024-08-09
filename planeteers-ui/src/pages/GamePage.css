@@ -1,0 +1,63 @@
+body{
+    background-image: linear-gradient(79deg, #298d9e, #65611e 48%, #ebfff0);
+  }
+  
+  .navbar {
+    position: static;
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 50px
+}
+  
+  .navbar ul li{
+     list-style: none;
+     display: inline-block;
+     margin: 0 20px;
+     font-size: 200px
+  }
+  .game {
+    width: 900px;
+    height: 400px;
+    align-items:center;
+    text-align:center;
+    padding: 30px;
+    gap: 20px;
+    color: blue;
+        background-color: lightgray;
+  
+  }
+  
+  .howtoplay {
+      height: 150px;
+      width: 550px;
+      background-color: lightgray;
+      margin: 10px;
+    display: inline-block;}
+  
+  .rating {
+    display: inline-block;
+    background-color: lightgray;
+    margin: 10px;
+    height: 100px;
+    width: 200px;
+   }
+  
+  .comments {
+    background-color: lightgray;
+    margin: 10px;
+    height: 300px;
+    width: 800px;
+  
+  
+  }
+  
+  .footer {
+     position: fixed;
+     left: 0;
+     bottom: 0;
+     width: 100%;
+     color: blue;
+     text-align: center;
+  }

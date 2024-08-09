@@ -5,7 +5,7 @@ export default function Home() {
     return (
     <div>
         <div class = "navbar">
-            <header>House Of Cards</header>
+            <header>Houses Of Cards</header>
             <ul>
                 <li>Home</li>
                 <li>Profile</li>
