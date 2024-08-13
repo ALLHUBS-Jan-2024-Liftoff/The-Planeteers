@@ -13,20 +13,6 @@ export default function Home() {
 
 
     const username = location.state?.username || "Guest" ;
-
-
-// useEffect(() => {
-//         const fetchUsername = async () => {
-//             try {
-//                 const response = await axios.get('/api/current-user');
-//                 setUsername(response.data);
-//             } catch (error) {
-//                 console.error('Error fetching username:', error);
-//             }
-//         };
-
-//         fetchUsername();
-//     }, []);
   
     const handleLogout = () => { 
         // Perform logout actions here (e.g., clear session, remove authentication token) 
