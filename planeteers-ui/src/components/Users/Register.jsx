@@ -10,6 +10,7 @@ import {
     MDBBtn, 
 } from 'mdb-react-ui-kit';
 
+
 export const Register = (props) => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
