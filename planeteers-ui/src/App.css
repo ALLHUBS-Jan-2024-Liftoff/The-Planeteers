@@ -132,11 +132,10 @@ img{
   .inforow {
     display: flex;
     justify-content: space-between;
+    width: 1000px;
+
   }
 
-  .inforow, input {
-    width: 1000px;
-  }
 
   .message{
     width: 1000px;
