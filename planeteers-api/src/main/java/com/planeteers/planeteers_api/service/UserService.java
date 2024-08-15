@@ -32,5 +32,5 @@ public interface UserService {
 
     Optional<User> updateUser(int id, User user);
 
-//    public String currentUser(String username);
+//    public String currentUser(String email);
 }

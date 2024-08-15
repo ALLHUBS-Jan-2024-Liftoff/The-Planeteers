@@ -40,7 +40,6 @@ export const Login = (props) => {
             <header>House of Cards</header>
 
                 <MDBContainer className="p-3"> 
-                    <h2 className="mb-4 text-center">Sign Up Page</h2> 
             
                     <MDBInput wrapperClass='mb-3' placeholder='Email address' id='email' value={email} type='email' onChange={(e) => setEmail(e.target.value)} /> 
                     <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={pwHash} onChange={(e) => setPwHash(e.target.value)} /> 

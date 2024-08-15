@@ -1,5 +1,6 @@
 package com.planeteers.planeteers_api.response;
 
+import com.planeteers.planeteers_api.models.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ public class AuthResponse {
     private String jwt;
     private String message;
     private Boolean status;
+    private User user;
 
     public String getJwt() {
         return jwt;
@@ -34,6 +36,11 @@ public class AuthResponse {
         this.status = status;
     }
 
+    public User getUser() {
+        return user;
+    }
 
-
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +56,7 @@ public class UserController {
 
         User isEmailExist = userRepository.findByEmail(email);
         if (isEmailExist != null) {
-            //throw new Exception("Email Is Already Used With Another Account");
+            return new ResponseEntity<>(HttpStatus.CONFLICT); // Example response for email conflict
 
         }
         User createdUser = new User();
@@ -78,13 +76,14 @@ public class UserController {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Register Success");
+        authResponse.setUser(savedUser);
         authResponse.setStatus(true);
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
 
     }
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest,  HttpServletRequest request) {
+    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest) {
         String username = loginRequest.getEmail();
         String password = loginRequest.getPwHash();
 
@@ -94,16 +93,21 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails authenticatedUser = (UserDetails) authentication.getPrincipal();
-
-        HttpSession session = request.getSession();
-        session.setAttribute("currentUser", authenticatedUser);
+        User currentUser = userRepository.findByEmail(username);
+//        HttpSession session = request.getSession();
+//        session.setAttribute("currentUser", authenticatedUser);
 
         String token = JwtProvider.generateToken(authentication);
-        AuthResponse authResponse = new AuthResponse();
+        System.out.println("Generated Token:" + token);
 
+        AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Login success");
+        authResponse.setUser(currentUser);   //<--------Set the User object
         authResponse.setJwt(token);
+        System.out.println("set token:" + token);
+
         authResponse.setStatus(true);
+        System.out.println("true");
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
@@ -152,17 +156,32 @@ public class UserController {
     }
 
 
+//    @GetMapping("currentUser")
+//    public User currentUser(HttpSession session) {
+//        // Retrieve the current user from the session
+//        UserDetails authenticatedUser = (UserDetails) session.getAttribute("currentUser");
+//        System.out.println(authenticatedUser);
+//
+//        if (authenticatedUser == null) {
+//            throw new RuntimeException("No user is currently logged in");
+//        }
+//
+//        // You may need to convert UserDetails to your User entity or return necessary user info
+//        User user = userRepository.findByEmail(authenticatedUser.getUsername());
+//
+//        return user;
+//    }
+
     @GetMapping("currentUser")
-    public User currentUser(HttpSession session) {
-        // Retrieve the current user from the session
-        UserDetails authenticatedUser = (UserDetails) session.getAttribute("currentUser");
+    public User currentUser() {
+        // Get the authentication object from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authenticatedUser == null) {
-            throw new RuntimeException("No user is currently logged in");
-        }
+        // The email of the authenticated user
+        String email = (String) authentication.getPrincipal();
 
-        // You may need to convert UserDetails to your User entity or return necessary user info
-        User user = userRepository.findByEmail(authenticatedUser.getUsername());
+        // Retrieve the user details from the database or service
+        User user = userRepository.findByEmail(email);
 
         return user;
     }

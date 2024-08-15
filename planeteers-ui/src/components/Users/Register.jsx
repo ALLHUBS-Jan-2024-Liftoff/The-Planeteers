@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'; 
 import { Link } from 'react-router-dom'; // Import useHistory hook 
+import Cookies from 'js-cookie';
 import { 
     MDBContainer, 
     MDBInput, 
@@ -46,8 +47,11 @@ export const Register = (props) => {
                 pwHash
             }); 
             // Handle successful signup 
-            console.log(response.data); 
-            history('/home'); 
+            console.log(response.data);
+            console.log('Register and Login successful:', response.data);
+            const token = response.data.token; // Assuming the token is returned in the response
+            Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' }); 
+            history('/home', { state: { username: email } }); 
         } catch (error) { 
             // Handle signup error 
             console.error('Signup failed:', error.response ? error.response.data : error.message); 
