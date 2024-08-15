@@ -54,7 +54,7 @@ img{
   max-width: 100%;
   max-height: 100%;
   }
-  .navbar {
+.navbar {
     position: static;
     padding: 5px 0;
     display: flex;
@@ -115,4 +115,37 @@ img{
 
   .row {
     display: flex;
+  }
+
+  .form {
+    width: 1000px;
+    height: 430px;
+    align-items:stretch;
+    text-align:stretch;
+    padding: 30px;
+    gap: 20px;
+    color: blue;
+    background-color: lightgray;
+  
+  }
+
+  .inforow {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .inforow, input {
+    width: 1000px;
+  }
+
+  .message{
+    width: 1000px;
+    height: 300px;
+  }
+
+  .title{
+    font-size: large;
+    font-family:Cambria;
+    font-weight: bold;
+    color: black;
   }
