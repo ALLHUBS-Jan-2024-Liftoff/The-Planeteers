@@ -7,7 +7,7 @@ import Home from './pages/Home'
 import GamePage  from './pages/GamePage'
 import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
-import GameOfWar  from './pages/GameOfWar'
+import GameOfWar  from './pages/War'
 import Solitaire  from './pages/Solitaire'
 
 
@@ -35,11 +35,11 @@ function App() {
                   <Route path ="/solitaire"  element={<Solitaire />} />
                   <Route path ="/cardmatch"  element={<CardMatch />} />
                   <Route path ="/blackjack"  element={<Blackjack />} /> 
+                  <Route path ="/comments"  element={<Comment/>} /> 
 
 
 
                 </Routes>
-            </Router>
        </div>
   );
 }
