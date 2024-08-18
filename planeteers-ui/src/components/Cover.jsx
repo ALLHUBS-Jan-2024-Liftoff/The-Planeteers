@@ -80,7 +80,7 @@ export default function Cover() {
               <Badge colorScheme="green">JPEG</Badge>
             </HStack>
           </ModalBody>
-
+      
           <ModalFooter>
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
