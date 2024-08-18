@@ -1,8 +1,7 @@
 package com.planeteers.planeteers_api.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 @Entity
 public class Score extends AbstractEntity{
@@ -11,7 +10,10 @@ public class Score extends AbstractEntity{
 
     public Score (){}
 
-    @ManyToOne
+    @OneToOne(mappedBy = "score")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     //getter and setter
