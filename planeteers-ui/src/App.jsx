@@ -9,7 +9,9 @@ import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
 import GameOfWar  from './pages/War'
 import Solitaire  from './pages/Solitaire'
-import Userprofile from './pages/Userprofile';
+import Userprofile from './pages/Userprofile'
+import Navbar from './components/Navbar/index.jsx';
+
 
 
 
@@ -23,6 +25,7 @@ export default function App() {
   return (
        <div className='App'>
             <Router>
+                <Navbar />
                 <Routes>
                     <Route index element={<Login />} />
                     <Route path ="/login"  element={<Login />} />
