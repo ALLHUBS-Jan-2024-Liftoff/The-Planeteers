@@ -7,7 +7,7 @@ import Home from './pages/Home'
 import GamePage  from './pages/GamePage'
 import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
-import GameOfWar  from './pages/GameOfWar'
+import GameOfWar  from './pages/War'
 import Solitaire  from './pages/Solitaire'
 import Contact from './pages/Contact'
 
