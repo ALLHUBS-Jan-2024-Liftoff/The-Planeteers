@@ -7,9 +7,9 @@ import Home from './pages/Home'
 import GamePage  from './pages/GamePage'
 import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
-import GameOfWar  from './pages/GameOfWar'
+import GameOfWar  from './pages/GameOfWarar'
 import Solitaire  from './pages/Solitaire'
-
+import Contact from './pages/Contact'
 
 
 function App() {
@@ -29,17 +29,17 @@ function App() {
                     <Route path ="/home"  element={<Home />} />
                     <Route path ="/gamepage"  element={<GamePage />} />
 {/* Uncomment once pages are completed */}
-{/*                 <Route path ="/contact"  element={<Contact />} /> */}
+                    <Route path ="/contact"  element={<Contact />} />
 {/*                 <Route path ="/profile"  element={<Profile />} /> */}
-                  <Route path ="/gameofwar"  element={<GameOfWar />} />
-                  <Route path ="/solitaire"  element={<Solitaire />} />
-                  <Route path ="/cardmatch"  element={<CardMatch />} />
-                  <Route path ="/blackjack"  element={<Blackjack />} /> 
-
+                    <Route path ="/gameofwar"  element={<GameOfWar />} />
+                    <Route path ="/solitaire"  element={<Solitaire />} />
+                    <Route path ="/cardmatch"  element={<CardMatch />} />
+                    <Route path ="/blackjack"  element={<Blackjack />} /> 
+                    <Route path ="/comments"  element={<Comment/>} /> 
 
 
                 </Routes>
-            </Router>
+              </Router>
        </div>
   );
 }
