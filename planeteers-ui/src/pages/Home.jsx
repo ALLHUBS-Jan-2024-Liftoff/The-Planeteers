@@ -1,9 +1,7 @@
 import './Home.css'
 import { useNavigate, useLocation } from "react-router-dom";
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
-
-// import Cookies from 'js-cookie';
 
 export default function Home() {
     const history = useNavigate(); 
