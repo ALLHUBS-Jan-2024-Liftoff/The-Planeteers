@@ -7,7 +7,9 @@ import com.planeteers.planeteers_api.response.AuthResponse;
 import com.planeteers.planeteers_api.securityConfig.JwtProvider;
 import com.planeteers.planeteers_api.service.UserService;
 import com.planeteers.planeteers_api.service.UserServiceImpl;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +40,7 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl customUserDetails;
+
 
     @Autowired
     private UserService userService;
@@ -83,34 +87,63 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest) {
+    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest, HttpServletResponse response) {
         String username = loginRequest.getEmail();
         String password = loginRequest.getPwHash();
 
-        System.out.println(username + "-------" + password);
-
+        // Authenticate user
         Authentication authentication = authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails authenticatedUser = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByEmail(username);
-//        HttpSession session = request.getSession();
-//        session.setAttribute("currentUser", authenticatedUser);
 
-        String token = JwtProvider.generateToken(authentication);
-        System.out.println("Generated Token:" + token);
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // Check if the user already has a JWT token stored
+        String existingToken = currentUser.getJwtToken();
+        Date tokenExpirationDate = currentUser.getTokenExpirationDate();
+
+        if (existingToken != null && !existingToken.isEmpty() && tokenExpirationDate != null) {
+            // Validate the existing token
+            if (new Date().before(tokenExpirationDate)) {
+                // If the token is still valid, return it without generating a new one
+                response.addHeader("Authorization", "Bearer " + existingToken);
+
+                AuthResponse authResponse = new AuthResponse();
+                authResponse.setMessage("Login success");
+                authResponse.setUser(currentUser);
+                authResponse.setJwt(existingToken);
+                authResponse.setStatus(true);
+
+                return new ResponseEntity<>(authResponse, HttpStatus.OK);
+            }
+        }
+
+        // Generate a new JWT token if the user doesn't have one or the existing one is invalid/expired
+        String newToken = JwtProvider.generateToken(authentication);
+
+        // Set token expiration date (e.g., 24 hours from now)
+        Date newExpirationDate = new Date(System.currentTimeMillis() + 86400000); // 24 hours in milliseconds
+
+        // Save the new token and its expiration date in the user's record
+        currentUser.setJwtToken(newToken);
+        currentUser.setTokenExpirationDate(newExpirationDate);
+        userRepository.save(currentUser);
+
+        response.addHeader("Authorization", "Bearer " + newToken);
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Login success");
-        authResponse.setUser(currentUser);   //<--------Set the User object
-        authResponse.setJwt(token);
-        System.out.println("set token:" + token);
-
+        authResponse.setUser(currentUser);
+        authResponse.setJwt(newToken);
         authResponse.setStatus(true);
-        System.out.println("true");
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
+
 
     @GetMapping("{id}")
     public ResponseEntity<?> getUserById(@PathVariable Integer id) {
@@ -174,17 +207,39 @@ public class UserController {
 
     @GetMapping("currentUser")
     public User currentUser() {
-        // Get the authentication object from the security context
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // The email of the authenticated user
-        String email = (String) authentication.getPrincipal();
-
-        // Retrieve the user details from the database or service
-        User user = userRepository.findByEmail(email);
-
-        return user;
+    return userService.currentUser();
     }
-}
+
+    @GetMapping("getcurrentuser")
+    public String getCurrentUser() {
+        // Access the current authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName(); // This will be the email or username
+
+        // You can also access other details or authorities if needed
+        return "Current user: " + currentUserEmail;
+    }
+
+//    private String getTokenFromHeader(HttpServletRequest request) {
+//        String authHeader = request.getHeader("Authorization");
+//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+//            return authHeader.substring(7); // Remove "Bearer " prefix
+//        }
+//        return null;
+//    }
+//
+//    @PostMapping("/storeSessionData")
+//    public String storeSessionData(HttpSession session, @RequestParam String data) {
+//        // Store data in session
+//        session.setAttribute("userData", data);
+//        return "Data stored in session";
+//    }
+//
+//    @GetMapping("/retrieveSessionData")
+//    public String retrieveSessionData(HttpSession session) {
+//        // Retrieve data from session
+//        String data = (String) session.getAttribute("userData");
+//        return "Stored data: " + data;
+    }
 
 

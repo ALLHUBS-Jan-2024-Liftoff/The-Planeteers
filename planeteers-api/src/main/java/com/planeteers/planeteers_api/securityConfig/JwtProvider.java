@@ -1,6 +1,9 @@
 package com.planeteers.planeteers_api.securityConfig;
 
+import com.planeteers.planeteers_api.models.User;
+import com.planeteers.planeteers_api.models.data.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
@@ -14,6 +17,8 @@ import java.util.Set;
 
 public class JwtProvider {
     static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+    private static final String SECRET_KEY = "your_secret_key"; // Replace with your secret key
+
 
     public static String generateToken(Authentication auth) {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
@@ -27,7 +32,15 @@ public class JwtProvider {
                 .compact();
         System.out.println("Token for parsing in JwtProvider: " + jwt);
         return jwt;
+    }
 
+    public static void validateToken(String token) throws JwtException {
+        SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+        try {
+            Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
+        } catch (JwtException e) {
+            throw new JwtException("Invalid JWT token");
+        }
     }
 
     private static String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
@@ -38,15 +51,23 @@ public class JwtProvider {
         return String.join(",",auths);
     }
 
+//    public Claims getClaimsFromToken(String token) {
+//        return Jwts.parserBuilder()
+//                .setSigningKey(key)
+//                .build()
+//                .parseClaimsJws(token)
+//                .getBody();
+//    }
 
     @SuppressWarnings("deprecation")
     public static String getEmailFromJwtToken(String jwt) {
-        jwt = jwt.substring(7); // Assuming "Bearer " is removed from the token
+        if (jwt != null && jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7); // Remove "Bearer " prefix
+        }
         try {
-            //Claims claims=Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-            String email = String.valueOf(claims.get("email"));
-            System.out.println("Email extracted from JWT: " + claims);
+            String email = claims.get("email", String.class); // Extract email safely
+            System.out.println("Email extracted from JWT: " + email);
             return email;
         } catch (Exception e) {
             System.err.println("Error extracting email from JWT: " + e.getMessage());
@@ -54,5 +75,10 @@ public class JwtProvider {
             return null;
         }
     }
+
+
+
+
+
 
 }

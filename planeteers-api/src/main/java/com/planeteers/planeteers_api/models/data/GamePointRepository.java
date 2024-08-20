@@ -1,9 +1,9 @@
 package com.planeteers.planeteers_api.models.data;
 
 import com.planeteers.planeteers_api.models.GamePoint;
-import com.planeteers.planeteers_api.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface GamePointRepository extends JpaRepository<User, Integer> {
-    GamePoint findByEmail(String email);
+@Repository
+public interface GamePointRepository extends JpaRepository<GamePoint, Integer> {
 }

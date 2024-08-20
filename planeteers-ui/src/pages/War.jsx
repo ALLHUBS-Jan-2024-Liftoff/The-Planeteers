@@ -1,8 +1,12 @@
 import './Home.css'
 import { useState, useEffect } from "react";
-import axios from "axios"
+//import axios from "axios"
 
 export default function War({user}) {
+
+    const location = useLocation();
+    const { username, playerPoints, gamePoints } = location.state || {};
+    
     const [deckId, setDeckId] = useState('');
     const [playerCard, setPlayerCard] = useState(null);
     const [computerCard, setComputerCard] = useState(null);
@@ -54,10 +58,14 @@ export default function War({user}) {
             setWinner('Player Wins!');
             setPlayerDeckCount(prevCount => prevCount + 1);
             setComputerDeckCount(prevCount => prevCount - 1);
+            updatePlayerPoints(10); // Update player points
+            updateGamePoints(5); // Update game points
         } else if (playerValue < computerValue) {
             setWinner('Computer Wins!');
             setPlayerDeckCount(prevCount => prevCount - 1);
             setComputerDeckCount(prevCount => prevCount + 1);
+            updatePlayerPoints(-5); // Update player points
+            updateGamePoints(-10); // Update game points
         } else {
             setWinner('It\'s a tie!');
         }
@@ -74,6 +82,35 @@ export default function War({user}) {
             setGameOver(true);
         }
     };
+
+    const updatePlayerPoint = (points) => {
+        axios.post('/api/user/updatePlayerPoints', {
+            playerPoints: points
+        }, {
+            headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        })
+        .then(response => {
+            console.log('Player points updated:', response.data);
+        })
+        .catch(error => {
+            console.error('Error updating player points:', error.response ? error.response.data : error.message);
+        });
+    };
+
+    const updateGamePoint = (points) => {
+        axios.post('/api/user/updateGamePoints', {
+            gamePoints: points
+        }, {
+            headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        })
+        .then(response => {
+            console.log('Game points updated:', response.data);
+        })
+        .catch(error => {
+            console.error('Error updating game points:', error.response ? error.response.data : error.message);
+        });
+    };
+
 
     return (
         <div>

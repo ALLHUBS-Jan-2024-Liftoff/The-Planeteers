@@ -2,13 +2,15 @@ package com.planeteers.planeteers_api.service;
 
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
-import io.jsonwebtoken.Jwt;
+import com.planeteers.planeteers_api.response.AuthResponse;
+import com.planeteers.planeteers_api.securityConfig.JwtProvider;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 
@@ -17,18 +19,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
         System.out.println(user);
 
-        if(user==null) {
-            throw new UsernameNotFoundException("User not found with this email"+username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with this email" + username);
 
         }
 
@@ -53,7 +57,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findUserByEmail(String email) {
-        return null;
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -97,17 +101,41 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-//    @Override
-//    public String getUserName() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//            String currentUserName = authentication.getName();
-//            return currentUserName;
-//        }else{
-//            throw RuntimeException("No User")
-//        }
-//
-//    public String getCurrentUserEmail() {
-//        return getUserName();
-//    }
+    @Override
+    public User currentUser() {
+        // Get the authentication object from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // The email of the authenticated user
+        String email = (String) authentication.getPrincipal();
+
+        // Retrieve the user details from the database or service
+        User user = userRepository.findByEmail(email);
+
+        return user;
     }
+
+
+    @Override
+    public AuthResponse getCurrentUser(HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        String token = (String) session.getAttribute("jwtToken");
+
+        if (currentUser == null || token == null) {
+            throw new RuntimeException("No user is currently logged in or token is missing");
+        }
+
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setUser(currentUser);
+        authResponse.setJwt(token);
+        authResponse.setMessage("User retrieved successfully");
+        authResponse.setStatus(true);
+
+        return authResponse;
+    }
+
+    @Override
+    public boolean verifyUserToken(User user, String token) {
+        return token.equals(user.getJwtToken());
+    }
+}
