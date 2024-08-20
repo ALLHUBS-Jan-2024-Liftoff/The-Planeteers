@@ -9,8 +9,7 @@ import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
 import GameOfWar  from './pages/War'
 import Solitaire  from './pages/Solitaire'
-import Userprofile from './pages/Userprofile';
-
+import Userprofile from './pages/Userprofile'
 import Contact from './pages/Contact'
 
 
@@ -32,7 +31,7 @@ export default function App() {
                     <Route path ="/gamepage"  element={<GamePage />} />
 {/* Uncomment once pages are completed */}
                     <Route path ="/contact"  element={<Contact />} />
-{/*                 <Route path ="/profile"  element={<Profile />} /> */}
+                    <Route path ="/userprofile" element={<Userprofile />} />
                     <Route path ="/gameofwar"  element={<GameOfWar />} />
                     <Route path ="/solitaire"  element={<Solitaire />} />
                     <Route path ="/cardmatch"  element={<CardMatch />} />
