@@ -1,5 +1,4 @@
 import SimpleBar from 'simplebar-react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from '../helpers/index.js'
 import Main from '../components/Main.jsx'
