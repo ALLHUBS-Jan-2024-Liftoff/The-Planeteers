@@ -8,11 +8,6 @@ export default function GamePage() {
     <div>
         <div class = "navbar">
             <header>House Of Cards</header>
-            <ul>
-                <li>Home</li>
-                <li>Profile</li>
-                <li>Sign Out</li>
-            </ul>
         </div>
         <div class="game">
             Game Goes Here

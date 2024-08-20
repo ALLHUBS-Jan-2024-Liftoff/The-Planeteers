@@ -3,8 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 
-// import Cookies from 'js-cookie';
-
 export default function Home() {
     const history = useNavigate(); 
     let location = useLocation();
@@ -25,8 +23,6 @@ export default function Home() {
         <div class = "navbar">
             <header>Houses Of Cards</header>
             <ul>
-                <li>Home</li>
-                <li>Profile</li>
                 <li>Welcome {username}</li>
                 <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button> 
                 </ul>

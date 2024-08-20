@@ -9,10 +9,17 @@ import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
 import GameOfWar  from './pages/War'
 import Solitaire  from './pages/Solitaire'
+
+import Userprofile from './pages/Userprofile'
+import Navbar from './components/Navbar/index.jsx';
+
+
 import Contact from './pages/Contact'
 
 
-function App() {
+
+
+export default function App() {
   const [currentForm, setCurrentForm] = useState('login')
 
   const toggleForm = (formFirstName, formLastName) => {
@@ -22,6 +29,7 @@ function App() {
   return (
        <div className='App'>
             <Router>
+                <Navbar />
                 <Routes>
                     <Route index element={<Login />} />
                     <Route path ="/login"  element={<Login />} />
@@ -29,8 +37,16 @@ function App() {
                     <Route path ="/home"  element={<Home />} />
                     <Route path ="/gamepage"  element={<GamePage />} />
 {/* Uncomment once pages are completed */}
+
+{/*                 <Route path ="/contact"  element={<Contact />} /> */}
+                  <Route path ="/Userprofile"  element={<Userprofile />} />
+                  <Route path ="/gameofwar"  element={<GameOfWar />} />
+                  <Route path ="/solitaire"  element={<Solitaire />} />
+                  <Route path ="/cardmatch"  element={<CardMatch />} />
+                  <Route path ="/blackjack"  element={<Blackjack />} /> 
+                  <Route path ="/comments"  element={<Comment/>} /> 
+
                     <Route path ="/contact"  element={<Contact />} />
-{/*                 <Route path ="/profile"  element={<Profile />} /> */}
                     <Route path ="/gameofwar"  element={<GameOfWar />} />
                     <Route path ="/solitaire"  element={<Solitaire />} />
                     <Route path ="/cardmatch"  element={<CardMatch />} />
@@ -39,8 +55,9 @@ function App() {
 
 
                 </Routes>
+            </Router>
        </div>
   );
 }
 
-export default App;
+
