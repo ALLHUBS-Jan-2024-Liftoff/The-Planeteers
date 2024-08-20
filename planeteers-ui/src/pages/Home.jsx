@@ -1,16 +1,31 @@
 import './Home.css'
+import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 
-function Home() {
+export default function Home() {
+    const history = useNavigate(); 
+    let location = useLocation();
+
+    console.log('Location State:', location.state);
+
+
+    const username = location.state?.username || "Guest" ;
+  
+    const handleLogout = () => { 
+        // Perform logout actions here (e.g., clear session, remove authentication token) 
+        // After logout, redirect to the login page 
+        Cookies.remove('token');
+        history('/'); 
+    }; 
     return (
     <div>
         <div class = "navbar">
-            <header>House Of Cards</header>
+            <header>Houses Of Cards</header>
             <ul>
-                <li>Home</li>
-                <li>Profile</li>
-                <li>Sign Out</li>
-            </ul>
+                <li>Welcome {username}</li>
+                <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button> 
+                </ul>
         </div>
        	<div class="games">
           	<div><img src="https://www.dropbox.com/scl/fi/bmlqqtls5mhd2ti806w29/cardmatch.jpg?rlkey=2l1c8rwwkrx49eorp3z1qh53y&st=cik849uh&raw=1" alt="Card Match" /></div>
@@ -19,10 +34,9 @@ function Home() {
   			<div><img src="https://www.dropbox.com/scl/fi/93epmz1pc6amh6g1dwrvw/blackjack.jpg?rlkey=jwhpa1cfqaoaw8nwdjaxfah4t&st=wun5jgco&raw=1" alt="Blackjack" /></div>
         </div>
         <div class = "footer">
-            <p>Contact Us<p>
+            <p>Contact Us</p>
         </div>
     </div>
     )
 }
 
-export default Home;

@@ -14,7 +14,6 @@ import java.util.Objects;
 public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     private int id;
 
 

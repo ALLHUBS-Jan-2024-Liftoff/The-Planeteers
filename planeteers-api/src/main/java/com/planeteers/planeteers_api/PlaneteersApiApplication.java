@@ -10,9 +10,6 @@ public class PlaneteersApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PlaneteersApiApplication.class, args);
 
-		User user1 = new User("mal", "lololo@gmail.com",21,"halfbaked");
-		User user2 = new User("mally", "lololo@gmail.com",21,"halfbakew");
-
 
 	}
 	// test
