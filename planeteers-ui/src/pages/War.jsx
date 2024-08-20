@@ -1,6 +1,6 @@
 import './Home.css'
 import { useState, useEffect } from "react";
-//import axios from "axios"
+import axios from "axios"
 
 export default function War({user}) {
     const [deckId, setDeckId] = useState('');

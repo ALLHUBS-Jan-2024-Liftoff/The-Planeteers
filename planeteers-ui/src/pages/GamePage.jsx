@@ -17,7 +17,6 @@ export default function GamePage() {
         <div class="rating">Rating</div>
         </div>
         <div class="comments">Comments</div>
-        <div class="footer">Contact Us</div>
 
     </div>
     )
