@@ -216,9 +216,6 @@ img{
     color: #1b5e20; /* Dark green color */
   }
   
-  .footer {
-    background-color: #ffecb3;
-  }
   .black-header {
     color: black;
   }
@@ -256,5 +253,10 @@ img{
     font-family:Cambria;
     font-weight: bold;
     color: black;
+  }
+
+
+  .emptyspace{
+    visibility: hidden;
   }
 
