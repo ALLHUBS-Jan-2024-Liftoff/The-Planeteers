@@ -40,20 +40,12 @@ export default function App() {
 
 {/*                 <Route path ="/contact"  element={<Contact />} /> */}
                   <Route path ="/Userprofile"  element={<Userprofile />} />
-                  <Route path ="/gameofwar"  element={<GameOfWar />} />
+                  <Route path ="/war"  element={<GameOfWar />} />
                   <Route path ="/solitaire"  element={<Solitaire />} />
                   <Route path ="/cardmatch"  element={<CardMatch />} />
                   <Route path ="/blackjack"  element={<Blackjack />} /> 
                   <Route path ="/comments"  element={<Comment/>} /> 
-
-                    <Route path ="/contact"  element={<Contact />} />
-                    <Route path ="/gameofwar"  element={<GameOfWar />} />
-                    <Route path ="/solitaire"  element={<Solitaire />} />
-                    <Route path ="/cardmatch"  element={<CardMatch />} />
-                    <Route path ="/blackjack"  element={<Blackjack />} /> 
-                    <Route path ="/comments"  element={<Comment/>} /> 
-
-
+                  <Route path ="/contact"  element={<Contact />} />
                 </Routes>
             </Router>
        </div>

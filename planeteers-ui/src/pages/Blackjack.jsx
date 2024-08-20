@@ -22,8 +22,6 @@ export default function Blackjack() {
         <div class="rating">Rating</div>
         </div>
         <div class="comments">Comments</div>
-        <div class="footer">Contact Us</div>
-
     </div>
     )
 }
