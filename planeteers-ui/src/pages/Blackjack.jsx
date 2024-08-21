@@ -2,6 +2,12 @@ import './Home.css'
 import { useState, useEffect } from "react";
 import axios from "axios"
 
+        //TODO
+        //Adjust Alerts so that the game updates to show what card leads to the player busting
+        //Still Needs if statements for dealer hitting and standing on soft 17
+        //Special message for initial draw if player draws blackjack or if dealer draws blackjack
+        //Connect to backend
+        
 
 
 export default function Blackjack() {
@@ -41,25 +47,20 @@ export default function Blackjack() {
     }, [playerCardCount]);
 
     useEffect(() => {
-        if(playerBust==true){
+        if (playerBust) {
             alert("Player Busted. Dealer Wins!");
-            resetGame();
+            resetGame();  // Reset the game
         }
     }, [playerBust]);
     
 
     const gameStart = () => {
-        //Card Draw
         axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=4`)
-        .then(response => {
-            const cards = response.data.cards;
-            addPlayerCard(cards[0])
-            addDealerCard(cards[1])
-            addPlayerCard(cards[2])
-            addDealerCard(cards[3])
-            setPlayerCardCount(calculateCardCount(playerCards));
-            setDealerCardCount(calculateCardCount(dealerCards));
-        });
+            .then(response => {
+                const cards = response.data.cards;
+                setPlayerCards([cards[0], cards[2]]);
+                setDealerCards([cards[1], cards[3]]);
+            });
     };
 
     const toggleHiddenGame = () => {
@@ -132,15 +133,20 @@ export default function Blackjack() {
     }
 
     const resetGame = () => {
-        axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/shuffle/`);
-        setPlayerCards([]);
-        setDealerCards([]);
+        axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/shuffle/`)
+        .then(response => {
         setPlayerBust(false);
         setDealerBust(false);
+        setPlayerCards([]);
+        setDealerCards([]);
+        setPlayerCardCount(0)
+        setDealerCardCount(0)
         gameStart();
+        });
     }
 
     const stand = () => {
+        //Still Needs if statements for dealer hitting and standing on soft 17
         if(playerCardCount - 21 > dealerCardCount - 21) {
             alert("Player Wins!")
         } else if (playerCardCount - 21 < dealerCardCount - 21){
@@ -148,6 +154,7 @@ export default function Blackjack() {
         } else {
             alert("Player and Dealer Tie: Push")
         }
+        resetGame();
     }
 
     return(
