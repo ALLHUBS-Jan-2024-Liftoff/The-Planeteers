@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 
+@Configuration
 public class SessionConfig {
     @Bean
     public HttpSessionIdResolver httpSessionIdResolver() {
