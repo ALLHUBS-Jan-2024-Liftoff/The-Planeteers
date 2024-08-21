@@ -5,21 +5,28 @@ import com.planeteers.planeteers_api.dto.LoginDTO;
 import com.planeteers.planeteers_api.dto.RegistrationDTO;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
+
 import com.planeteers.planeteers_api.service.AuthenticationService;
 import com.planeteers.planeteers_api.service.RegistrationService;
 import com.planeteers.planeteers_api.service.UserService;
+
+import com.planeteers.planeteers_api.service.UserService;
+import com.planeteers.planeteers_api.service.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +36,17 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
+
     private AuthenticationService authenticationService;
+
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private UserServiceImpl customUserDetails;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -38,6 +55,8 @@ public class UserController {
     public List<User> index() {
         return userService.getAllUsers();
     }
+
+
     @PostMapping("create")
     public ResponseEntity<?> createUser(@RequestBody @Valid RegistrationDTO registrationDTO, HttpSession session, Errors errors){
         if (errors.hasErrors()) {
@@ -102,7 +121,10 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}")
+  
+
+   
+    @GetMapping("{id}")
     public ResponseEntity<?> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
@@ -111,7 +133,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id");
         }
     }
-    @PutMapping("/edit/{id}")
+
+    @PutMapping("edit/{id}")
     public ResponseEntity<?> editUser(@PathVariable int id, @RequestBody @Valid User user) {
         Optional<User> updatedUser = userService.updateUser(id, user);
         if (updatedUser.isPresent()) {
@@ -120,6 +143,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id: " + id);
         }
     }
+
 
     @DeleteMapping("/delete/{id}")
 public ResponseEntity<?> deleteUser(@PathVariable int id) {
@@ -140,4 +164,8 @@ public ResponseEntity<?> deleteUser(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while logging out");
     }
         }
+
+    
 }
+
+

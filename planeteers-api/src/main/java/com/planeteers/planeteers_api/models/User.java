@@ -1,10 +1,14 @@
 package com.planeteers.planeteers_api.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.Serializable;
@@ -16,6 +20,7 @@ public class User extends AbstractEntity implements Serializable {
     @Transient
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private static final long serialVersionUID = 1L;
+
 
 
 
@@ -42,8 +47,8 @@ public class User extends AbstractEntity implements Serializable {
     @JoinColumn(name = "credit_id", referencedColumnName = "id")
     private Credit credit;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private final List<Comment> comments = new ArrayList<>();
 
     public User () {}
@@ -62,9 +67,7 @@ public class User extends AbstractEntity implements Serializable {
     public String getPwHash() {
         return pwHash;
     }
-
     public void setPwHash(String password) {
-
         this.pwHash = password;
     }
 
@@ -92,20 +95,38 @@ public class User extends AbstractEntity implements Serializable {
         this.age = age;
     }
 
+
     public boolean isMatchingPassword(String password) {
         return encoder.matches(password, pwHash);}
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<Score> getScores() {
+        return scores;
+    }
+
+    public Credit getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Credit credit) {
+        this.credit = credit;
+    }
+
 
     @Override
     public String toString() {
         return "User{" +
-                " id '" + getId() + '\'' +
+                " id='" + getId() + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 ", pwHash='" + pwHash + '\'' +
-                ", scores=" + scores +
-                ", credit=" + credit +
-                ", comments=" + comments +
+                ", scores=" + scores.size() +
+                ", credit=" + (credit != null ? credit.getId() : null) +
+                ", comments=" + comments.size() +
                 '}';
     }
 
