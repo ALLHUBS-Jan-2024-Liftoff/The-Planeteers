@@ -18,14 +18,11 @@ const Navbar = () => {
                     <NavLink to="/home" >
                         Home
                     </NavLink>
-                    <NavLink to="/gamepage" activeStyle>
-                        Games
-                    </NavLink>
                     <NavLink to="/userprofile" activeStyle>
                         Profile
                     </NavLink>
-                    <NavLink to="/comment" activeStyle>
-                        Comments
+                    <NavLink to="/contact" activeStyle>
+                        Contact Us
                     </NavLink>
                     {/* Second Nav */}
                     {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}

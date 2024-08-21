@@ -48,7 +48,7 @@ function Profile() {
         name="Tim Cook"
         cursor="pointer"
         onClick={openChooseImage}
-        src={userProfile ? userProfile : '/img/tim-cook.jpg'}
+        src={userProfile ? userProfile : 'images/defaultproimg.jpg'}
       >
         <AvatarBadge bg="brand.blue" boxSize="1em">
           <svg width="0.4em" fill="currentColor" viewBox="0 0 20 20">
