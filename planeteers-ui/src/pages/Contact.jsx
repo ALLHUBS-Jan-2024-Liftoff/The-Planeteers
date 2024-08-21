@@ -36,16 +36,7 @@ export default function Contact() {
     return (
         <div>
             <div className="navbar">
-<<<<<<< HEAD
                 <header>House of Cards</header>
-=======
-                <header>House Of Cards</header>
-                <ul>
-                    <li>Home</li>
-                    <li>Profile</li>
-                    <li>Sign Out</li>
-                </ul>
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
             </div>
             <div className="myForm">
                 <label className="title">Contact Us</label>

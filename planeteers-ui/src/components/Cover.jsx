@@ -44,11 +44,7 @@ export default function Cover() {
         w="full"
         h="full"
         objectFit="cover"
-<<<<<<< HEAD
         src={coverImage ? coverImage : '/images/defaultcoverimg.jpg'}
-=======
-        src={coverImage ? coverImage : '/img/cover.jpg'}
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
         alt="Cover"
       />
       <Button

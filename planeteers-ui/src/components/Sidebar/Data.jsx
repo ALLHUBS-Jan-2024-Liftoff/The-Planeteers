@@ -13,15 +13,6 @@ const list = [
     value: 26,
     color: 'green',
   },
-<<<<<<< HEAD
-=======
-  {
-    id: 3,
-    name: 'Play Time Hours',
-    value: 6,
-    color: 'cadet',
-  },
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
 ]
 
 function Data() {
