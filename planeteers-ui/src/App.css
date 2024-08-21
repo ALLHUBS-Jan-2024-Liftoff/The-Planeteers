@@ -1,0 +1,262 @@
+ body {
+  color: black;
+  text-align: center;
+  display: flex;
+  min-height: 100wh;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(79deg, #298d9e, #65611e 48%, #ebfff0);
+}
+header{
+  position: sticky;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: #fff;
+  padding: 2px;
+  font-size: 3rem;
+}
+
+
+.auth-form-container, .login-form, .register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  text-align: left;
+  padding: .25rem 0;
+}
+
+input {
+  margin: .5rem 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;  
+}
+
+button {
+  border: none;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.link-btn {
+  background: none;
+  background-color: white;
+  text-decoration: underline;
+}
+
+img{
+  max-width: 100%;
+  max-height: 100%;
+  } */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    min-height: auto;
+  }
+
+  .navbar {
+    background-color: #076e21;
+    color: white;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .navbar header {
+    font-size: 1.5em;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    display: flex;
+    gap: 1em;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar ul li {
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar ul li:hover {
+    color: #ffcc00;
+  }
+  
+  .container {
+    background-color: green;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px; /* Adjust width to ensure it spans more of the screen */
+    width: 100%; /* Ensure the container spans the full width available */
+    margin-top: 3em; /* Space for the fixed navbar */
+  }
+  
+.container-2{
+  background-color: gray;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px; /* Adjust width to ensure it spans more of the screen */
+  width: 100%; /* Ensure the container spans the full width available */
+  margin-top: 3em; /* Space for the fixed navbar */
+}
+
+  h1 {
+    margin-bottom: 1em;
+    color: #333;
+  }
+  
+  button {
+    background-color: #ffcc00;
+    color: #333;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #ffb700;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .card-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5em;
+  }
+  
+  .card-container div {
+    text-align: center;
+  }
+  
+  .card-container img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5em;
+  }
+  
+  h3 {
+    color: #555;
+    margin-top: 1em;
+  }
+  
+  h4 {
+    color: #777;
+    margin-top: 0.5em;
+  }
+  
+  /* Styles for the footer, how to play, rating, and comments sections */
+  
+  .row {
+    display: flex;
+    justify-content: space-between; /* Ensure boxes are spaced evenly */
+    gap: 20px; /* Space between the boxes */
+    margin-bottom: 20px; /* Space below the row */
+  }
+  
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+    width: 100%; /* Make boxes expand to full width */
+    max-width: 250px; /* Adjust maximum width of boxes */
+    height: 100px; /* Adjust height as needed */
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Default text color */
+  }
+  
+  .box:hover {
+    background-color: #e0e0e0; /* Change background on hover */
+  }
+  
+  .howtoplay {
+    background-color: #e0f7fa;
+  }
+  
+  .rating {
+    background-color: #fff3e0;
+  }
+  
+  .comments {
+    background-color: #e8f5e9;
+    color: #1b5e20; /* Dark green color */
+  }
+  
+  .black-header {
+    color: black;
+  }
+
+  .myForm {
+    width: 1000px;
+    height: 460px;
+    align-items:stretch;
+    text-align:stretch;
+    padding: 30px;
+    gap: 20px;
+    color: blue;
+    background-color: lightgray;
+  
+  }
+
+  .inforow {
+    display: flex;
+    justify-content: space-around;
+
+  }
+
+  .inforow * {
+    width: 400px;
+  }
+
+
+  .message{
+    width: 1000px;
+    height: 300px;
+  }
+
+  .title{
+    font-size: large;
+    font-family:Cambria;
+    font-weight: bold;
+    color: black;
+  }
+
+
+  .emptyspace{
+    visibility: hidden;
+  }
+
