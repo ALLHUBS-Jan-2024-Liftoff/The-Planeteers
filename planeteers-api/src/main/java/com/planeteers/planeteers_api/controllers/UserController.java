@@ -1,13 +1,19 @@
 package com.planeteers.planeteers_api.controllers;
 
 
+import com.planeteers.planeteers_api.dto.LoginDTO;
+import com.planeteers.planeteers_api.dto.RegistrationDTO;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
-import com.planeteers.planeteers_api.response.AuthResponse;
-import com.planeteers.planeteers_api.securityConfig.JwtProvider;
+
+import com.planeteers.planeteers_api.service.AuthenticationService;
+import com.planeteers.planeteers_api.service.RegistrationService;
+import com.planeteers.planeteers_api.service.UserService;
+
 import com.planeteers.planeteers_api.service.UserService;
 import com.planeteers.planeteers_api.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +36,9 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
+
+    private AuthenticationService authenticationService;
+
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,7 +49,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private RegistrationService registrationService;
     @GetMapping("/")
     public List<User> index() {
         return userService.getAllUsers();
@@ -48,70 +58,72 @@ public class UserController {
 
 
     @PostMapping("create")
-    public ResponseEntity<AuthResponse> createUser(@RequestBody @Valid User user) {
-        String email = user.getEmail();
-        String password = user.getPwHash();
-        String fullName = user.getName();
-        int age = user.getAge();
-
-        User isEmailExist = userRepository.findByEmail(email);
-        if (isEmailExist != null) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT); // Example response for email conflict
-
+    public ResponseEntity<?> createUser(@RequestBody @Valid RegistrationDTO registrationDTO, HttpSession session, Errors errors){
+        if (errors.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (ObjectError error : errors.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
-        User createdUser = new User();
-        createdUser.setEmail(email);
-        createdUser.setName(fullName);
-        createdUser.setAge(age);
-        createdUser.setPwHash(passwordEncoder.encode(password));
 
-        User savedUser = userRepository.save(createdUser);
-        userRepository.save(savedUser);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = JwtProvider.generateToken(authentication);
-
-
-        AuthResponse authResponse = new AuthResponse();
-        authResponse.setJwt(token);
-        authResponse.setMessage("Register Success");
-        authResponse.setUser(savedUser);
-        authResponse.setStatus(true);
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        try {
+        User user = registrationService.registerUser(registrationDTO);
+        session.setAttribute("currentUser", user);
+        System.out.println( " created user session" + session.getId());
+        System.out.println("this is the current user after create" + session.getAttribute("currentUser"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(session.getAttribute("currentUser"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while creating the user.");
+        }
 
     }
 
-    @PostMapping("login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody User loginRequest) {
-        String username = loginRequest.getEmail();
-        String password = loginRequest.getPwHash();
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO, HttpSession session, Errors errors) {
+        if (errors.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (ObjectError error : errors.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+        }
 
-        System.out.println(username + "-------" + password);
-
-        Authentication authentication = authenticate(username, password);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        UserDetails authenticatedUser = (UserDetails) authentication.getPrincipal();
-        User currentUser = userRepository.findByEmail(username);
-//        HttpSession session = request.getSession();
-//        session.setAttribute("currentUser", authenticatedUser);
-
-        String token = JwtProvider.generateToken(authentication);
-        System.out.println("Generated Token:" + token);
-
-        AuthResponse authResponse = new AuthResponse();
-        authResponse.setMessage("Login success");
-        authResponse.setUser(currentUser);   //<--------Set the User object
-        authResponse.setJwt(token);
-        System.out.println("set token:" + token);
-
-        authResponse.setStatus(true);
-        System.out.println("true");
-
-        return new ResponseEntity<>(authResponse, HttpStatus.OK);
+        try {
+            User user = authenticationService.authenticateUser(loginDTO);
+            session.setAttribute("currentUser", user);
+            System.out.println("User logged in:" + user.getEmail());
+            System.out.println("Session ID: login " + session.getId());
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> checkLogin(HttpSession session) {
+
+        try{
+            User currentUser = (User) session.getAttribute("currentUser");
+            if (currentUser != null){
+                String sessionId = session.getId();
+                System.out.println("Current user " + currentUser);
+                System.out.println("session id " + sessionId);
+                return ResponseEntity.ok(currentUser);
+            }else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving the user");
+        }
+
+    }
+
+
+  
+
+   
     @GetMapping("{id}")
     public ResponseEntity<?> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.getUserById(id);
@@ -132,59 +144,28 @@ public class UserController {
         }
     }
 
-    private Authentication authenticate(String username, String password) {
 
-        System.out.println(username + "---++----" + password);
-
-        UserDetails userDetails = customUserDetails.loadUserByUsername(username);
-
-        System.out.println("Sig in in user details" + userDetails);
-
-        if (userDetails == null) {
-            System.out.println("Sign in details - null" + userDetails);
-
-            throw new BadCredentialsException("Invalid username and password");
-        }
-        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            System.out.println("Sign in userDetails - password mismatch" + userDetails);
-
-            throw new BadCredentialsException("Invalid password");
-
-        }
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
+    @DeleteMapping("/delete/{id}")
+public ResponseEntity<?> deleteUser(@PathVariable int id) {
+    try {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
-
-
-//    @GetMapping("currentUser")
-//    public User currentUser(HttpSession session) {
-//        // Retrieve the current user from the session
-//        UserDetails authenticatedUser = (UserDetails) session.getAttribute("currentUser");
-//        System.out.println(authenticatedUser);
-//
-//        if (authenticatedUser == null) {
-//            throw new RuntimeException("No user is currently logged in");
-//        }
-//
-//        // You may need to convert UserDetails to your User entity or return necessary user info
-//        User user = userRepository.findByEmail(authenticatedUser.getUsername());
-//
-//        return user;
-//    }
-
-    @GetMapping("currentUser")
-    public User currentUser() {
-        // Get the authentication object from the security context
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // The email of the authenticated user
-        String email = (String) authentication.getPrincipal();
-
-        // Retrieve the user details from the database or service
-        User user = userRepository.findByEmail(email);
-
-        return user;
+}
+        @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session){
+    try{
+        session.invalidate();
+        System.out.println("User logged out. Session invalidated.");
+        return ResponseEntity.ok("User successfully logged out");
+    }catch (Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while logging out");
     }
+        }
+
+    
 }
 
 

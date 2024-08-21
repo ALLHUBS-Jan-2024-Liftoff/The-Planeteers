@@ -32,5 +32,7 @@ public interface UserService {
 
     Optional<User> updateUser(int id, User user);
 
-//    public String currentUser(String email);
+    void deleteUser(int id);
+
+
 }

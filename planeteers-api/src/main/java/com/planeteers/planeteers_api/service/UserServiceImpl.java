@@ -1,14 +1,16 @@
 package com.planeteers.planeteers_api.service;
 
+import com.planeteers.planeteers_api.exceptions.UserNotFoundException;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
 import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UserRepository userRepository;
@@ -88,7 +91,7 @@ public class UserServiceImpl implements UserService{
             currentUser.setAge(user.getAge());
             currentUser.setEmail(user.getEmail());
             if (user.getPwHash() != null && !user.getPwHash().isEmpty()) {
-                currentUser.setPwHash(user.getPwHash());
+                currentUser.setPwHash(encoder.encode(user.getPwHash()));
             }
             userRepository.save(currentUser);
             return Optional.of(currentUser);
@@ -97,17 +100,16 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-//    @Override
-//    public String getUserName() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//            String currentUserName = authentication.getName();
-//            return currentUserName;
-//        }else{
-//            throw RuntimeException("No User")
-//        }
-//
-//    public String getCurrentUserEmail() {
-//        return getUserName();
-//    }
+
+    @Override
+    public void deleteUser(int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+        }else{
+            throw new UserNotFoundException("User not found");
+
+        }
     }
+}
+
