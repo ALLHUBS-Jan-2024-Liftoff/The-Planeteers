@@ -16,11 +16,8 @@ public interface UserService {
 
     public List<User> getAllUsers();
 
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     public User saveUser(User user);
-
-    public User findUserProfileByJwt(String jwt);
 
     public User findUserByEmail(String email) ;
 
