@@ -82,10 +82,23 @@ public class UserController {
         }
     }
 
-    @GetMapping("/checkLogin")
-    public void checkLogin(HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        System.out.println(currentUser.getEmail());
+    @GetMapping("/me")
+    public ResponseEntity<?> checkLogin(HttpSession session) {
+
+        try{
+            User currentUser = (User) session.getAttribute("currentUser");
+            if (currentUser != null){
+                String sessionId = session.getId();
+                System.out.println("Current user " + currentUser);
+                System.out.println("session id " + sessionId);
+                return ResponseEntity.ok(currentUser);
+            }else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving the user");
+        }
+
     }
 
 
@@ -108,5 +121,23 @@ public class UserController {
         }
     }
 
-
+    @DeleteMapping("/delete/{id}")
+public ResponseEntity<?> deleteUser(@PathVariable int id) {
+    try {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+}
+        @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session){
+    try{
+        session.invalidate();
+        System.out.println("User logged out. Session invalidated.");
+        return ResponseEntity.ok("User successfully logged out");
+    }catch (Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while logging out");
+    }
+        }
 }

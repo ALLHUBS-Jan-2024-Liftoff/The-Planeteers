@@ -14,7 +14,7 @@ public class RegistrationService {
     @Autowired
    private UserRepository userRepository;
 
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User registerUser(RegistrationDTO registrationDTO) {
         User user = new User();

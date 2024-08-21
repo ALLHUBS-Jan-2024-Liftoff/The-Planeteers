@@ -1,5 +1,6 @@
 package com.planeteers.planeteers_api.service;
 
+import com.planeteers.planeteers_api.exceptions.UserNotFoundException;
 import com.planeteers.planeteers_api.models.User;
 import com.planeteers.planeteers_api.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,17 @@ public class UserServiceImpl implements UserService{
             return Optional.of(currentUser);
         } catch (Exception e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+        }else{
+            throw new UserNotFoundException("User not found");
+
         }
     }
 }

@@ -23,6 +23,9 @@ public class AuthenticationService {
         Optional<User> optionalUser = userRepository.findByEmail(loginDTO.getEmail());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            System.out.println("user found by email " + user.getPwHash());
+            System.out.println("login dto password" + loginDTO.getPassword());
+        System.out.println(encoder.matches(loginDTO.getPassword(), user.getPwHash()));
             if (encoder.matches(loginDTO.getPassword(), user.getPwHash())) {
                 return user;
             } else {

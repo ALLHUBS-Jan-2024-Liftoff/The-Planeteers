@@ -7,12 +7,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class User extends AbstractEntity{
+public class User extends AbstractEntity implements Serializable {
+    @Transient
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private static final long serialVersionUID = 1L;
+
 
 
     @NotNull(message = "Cannot be blank")
@@ -49,7 +53,7 @@ public class User extends AbstractEntity{
         this.name = name;
         this.email = email;
         this.age = age;
-        this.pwHash = encoder.encode(password);
+        this.pwHash = password;
     }
 
     //getters and setters
@@ -60,7 +64,8 @@ public class User extends AbstractEntity{
     }
 
     public void setPwHash(String password) {
-        this.pwHash = encoder.encode(password);
+
+        this.pwHash = password;
     }
 
     public String getName() {
