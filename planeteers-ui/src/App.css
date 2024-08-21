@@ -258,3 +258,11 @@ img{
   .emptyspace{
     visibility: hidden;
   }
+
+  .hidden{
+    display: none;
+  }
+
+  .numberFont{
+    font-size: 35px
+  }
