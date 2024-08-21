@@ -4,20 +4,12 @@ body{
 
 .navbar {
     position: static;
-<<<<<<< HEAD
     padding: 0px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 40px;
     font-weight: 100;
-=======
-    padding: 5px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 50px
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
 }
 
 .navbar ul li{
@@ -37,15 +29,3 @@ body{
 }
 
 
-<<<<<<< HEAD
-
-=======
-.footer {
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   color: blue;
-   text-align: center;
-}
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0

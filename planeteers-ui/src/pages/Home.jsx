@@ -21,16 +21,11 @@ export default function Home() {
     return (
     <div>
         <div class = "navbar">
-<<<<<<< HEAD
-            <header>House of Cards</header>
+            <header>House of Cards
+            
+            </header>
             <ul>
                 <li>Welcome {username}!</li>
-=======
-            <header>Houses Of Cards</header>
-            <ul>
-                <li>Welcome {username}</li>
-                <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button> 
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
                 </ul>
         </div>
         <div class="emptyspace">.</div>
@@ -54,12 +49,6 @@ export default function Home() {
             </Link>
 
         </div>
-<<<<<<< HEAD
-=======
-        <div class = "footer">
-            <p>Contact Us</p>
-        </div>
->>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
     </div>
     )
 }
