@@ -8,7 +8,8 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 50px
+    font-size: 40px;
+    font-weight: 100;
 }
 
 .navbar ul li{

@@ -18,9 +18,6 @@ const Navbar = () => {
                     <NavLink to="/home" >
                         Home
                     </NavLink>
-                    <NavLink to="/gamepage" activeStyle>
-                        Games
-                    </NavLink>
                     <NavLink to="/userprofile" activeStyle>
                         Profile
                     </NavLink>

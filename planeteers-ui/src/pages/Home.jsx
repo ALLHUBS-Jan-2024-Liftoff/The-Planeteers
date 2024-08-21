@@ -23,7 +23,7 @@ export default function Home() {
         <div class = "navbar">
             <header>House of Cards</header>
             <ul>
-                <li>Welcome {username}</li>
+                <li>Welcome {username}!</li>
                 </ul>
         </div>
         <div class="emptyspace">.</div>
