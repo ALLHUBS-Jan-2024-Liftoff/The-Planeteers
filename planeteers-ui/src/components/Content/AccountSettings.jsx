@@ -14,14 +14,6 @@ function AccountSettings() {
         <FormLabel>Last Name</FormLabel>
         <Input focusBorderColor="brand.blue" type="text" placeholder="Cook" />
       </FormControl>
-      <FormControl id="phoneNumber">
-        <FormLabel>Phone Number</FormLabel>
-        <Input
-          focusBorderColor="brand.blue"
-          type="tel"
-          placeholder="(408) 996–1010"
-        />
-      </FormControl>
       <FormControl id="emailAddress">
         <FormLabel>Email Address</FormLabel>
         <Input
