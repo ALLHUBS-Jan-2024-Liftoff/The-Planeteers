@@ -80,6 +80,7 @@ export const Register = (props) => {
   
 
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
+<<<<<<< HEAD
                             style={{height: '40px', width: '100%', padding: '0px'}} 
                             onClick={handleSubmit}>Sign Up 
                     </button> 
@@ -89,6 +90,14 @@ export const Register = (props) => {
                     <Link to="/login">
                  <button type="button"
                          style={{margin: '10px', padding: '8px'}}>
+=======
+                            style={{height: '40px', width: '100%'}} 
+                            onClick={handleSubmit}>Sign Up 
+                    </button> 
+  
+                    <Link to="/login">
+                 <button type="button">
+>>>>>>> f3ce78f6eb5a5daf3364f5e29a703a8229dd8ee0
                       Already have account? Log in here!
                  </button>
                 </Link>
