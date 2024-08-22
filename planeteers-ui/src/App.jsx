@@ -13,14 +13,18 @@ import Solitaire from './pages/Solitaire';
 import Userprofile from './pages/Userprofile';
 import Navbar from './components/Navbar/index.jsx';
 import Contact from './pages/Contact';
+import Layout from './Layout';
 // import Comment from './pages/Comment';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Login />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+    <Route path="/" element={<Login />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+    
+    {/* Routes that need the Navbar */}
+    <Route element={<Layout />}>
       <Route path="/home" element={<Home />} />
       <Route path="/gamepage" element={<GamePage />} />
       <Route path="/userprofile" element={<Userprofile />} />
@@ -30,15 +34,17 @@ const router = createBrowserRouter(
       <Route path="/blackjack" element={<Blackjack />} />
       <Route path="/comments" element={<Comment />} />
       <Route path="/contact" element={<Contact />} />
-    </>
+    </Route>
+  </>
   )
 );
 
 function App() {
   return (
     <UserProvider>
-           <Navbar />
-           <RouterProvider router={router} />
+      <RouterProvider router={router}>
+      
+      </RouterProvider>
     </UserProvider>
   );
 }

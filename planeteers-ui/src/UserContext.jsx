@@ -6,6 +6,12 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [playerPoints, setPlayerPoints] = useState(() => {
+    return parseInt(localStorage.getItem("playerPoints")) || 0;
+  });
+  const [gamePoints, setGamePoints] = useState(() => {
+    return parseInt(localStorage.getItem("gamePoints")) || 0;
+  });
 
   useEffect(() => {
     // Retrieve user info from localStorage or cookies
@@ -42,8 +48,25 @@ export const UserProvider = ({ children }) => {
     Cookies.remove("token");
   };
 
+  const updatePlayerPoints = (points) => {
+    setPlayerPoints(prevPoints => {
+      const newPoints = prevPoints + points;
+      localStorage.setItem("playerPoints", newPoints);
+      return newPoints;
+    });
+  };
+
+  // Function to update game points
+  const updateGamePoints = (points) => {
+    setGamePoints(prevPoints => {
+      const newPoints = prevPoints + points;
+      localStorage.setItem("gamePoints", newPoints);
+      return newPoints;
+    });
+  };
+
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, playerPoints, gamePoints, updatePlayerPoints, updateGamePoints }}>
       {children}
     </UserContext.Provider>
   );
