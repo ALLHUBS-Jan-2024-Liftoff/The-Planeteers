@@ -1,6 +1,8 @@
 import './Home.css'
 import { useState, useEffect } from "react";
 import axios from "axios"
+import { useNavigate,Link, useLocation } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 
         
@@ -8,6 +10,7 @@ import axios from "axios"
 
 export default function Blackjack() {
 
+    
     //Initialize the Use States
     const [deckId, setDeckId] = useState('');
     const [playerCards, setPlayerCards] = useState([]);
@@ -256,6 +259,20 @@ export default function Blackjack() {
             }
         }
     }, [isDealerTurn, shouldDrawDealerCard, dealerCardCount, dealerCards]);
+
+    const location = useLocation();
+
+    console.log('Location State:', location.state);
+
+    const username = location.state?.username || "Guest" ;
+  
+    const handleLogout = () => { 
+        // Perform logout actions here (e.g., clear session, remove authentication token) 
+        // After logout, redirect to the login page 
+        Cookies.remove('token');
+        history('/'); 
+    }; 
+
     
 
     return(
@@ -263,9 +280,8 @@ export default function Blackjack() {
         <div class = "navbar">
             <header>House Of Cards</header>
             <ul>
-                <li>Home</li>
-                <li>Profile</li>
-                <li>Sign Out</li>
+            <li>Welcome {username}</li>
+            <button type="button" onClick={handleLogout}>Logout</button> 
             </ul>
         </div>
         <div class="container" >

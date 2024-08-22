@@ -4,13 +4,13 @@ import Cookies from 'js-cookie';
 
 
 export default function Home() {
-    const history = useNavigate(); 
-    let location = useLocation();
+    // const history = useNavigate(); 
+    // let location = useLocation();
 
-    console.log('Location State:', location.state);
+    // console.log('Location State:', location.state);
 
 
-    const username = location.state?.username || "Guest" ;
+    const username = localStorage.getItem('username');
   
     const handleLogout = () => { 
         // Perform logout actions here (e.g., clear session, remove authentication token) 
