@@ -3,6 +3,7 @@ body{
 }
 
 .navbar {
+    background-color: green;
     position: static;
     padding: 0px 0;
     display: flex;

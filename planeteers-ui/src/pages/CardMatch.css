@@ -1,0 +1,12 @@
+.game {
+    width: 90vw;
+    height: fit;
+    align-items:center;
+    text-align:center;
+    padding: 2px;
+    gap: 1px;
+    color: blue;
+    margin-top:40px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 6 equal columns */
+  }
