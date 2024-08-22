@@ -2,11 +2,7 @@ import './Home.css'
 import { useState, useEffect } from "react";
 import axios from "axios"
 
-        //TODO
-        //Adjust Alerts so that the game updates to show what card leads to the player busting
-        //Still Needs if statements for dealer hitting and standing on soft 17
-        //Special message for initial draw if player draws blackjack or if dealer draws blackjack
-        //Connect to backend
+
         
 
 
@@ -15,15 +11,23 @@ export default function Blackjack() {
     //Initialize the Use States
     const [deckId, setDeckId] = useState('');
     const [playerCards, setPlayerCards] = useState([]);
+    const [dealerCards, setDealerCards] = useState([]);
     const [playerCardCount, setPlayerCardCount] = useState('');
     const [dealerCardCount, setDealerCardCount] = useState('')
+    const [dealerShownCount, setDealerShownCount] = useState('')
     const [playerBust, setPlayerBust] = useState(false);
     const [dealerBust, setDealerBust] = useState(false);
+    const [playerStand, setPlayerStand] = useState(false);
+    const [isDealerTurn, setIsDealerTurn] = useState(false);
+    const [shouldDrawDealerCard, setShouldDrawDealerCard] = useState(false);
+    const [winMessage, setWinMessage] = useState('');
+    const [showFirstCard, setShowFirstCard] = useState(false);
+    const [isFirstDraw, setIsFirstDraw] = useState(true);
+
     const addPlayerCard = newPlayerCard => {
         setPlayerCards(prevPlayerCard => [...prevPlayerCard, newPlayerCard]);
       };
     
-    const [dealerCards, setDealerCards] = useState([]);
     const addDealerCard = newDealerCard => {
         setDealerCards(prevDealerCard => [...prevDealerCard, newDealerCard]);
     };
@@ -40,18 +44,49 @@ export default function Blackjack() {
     useEffect(() => {
         setPlayerCardCount(calculateCardCount(playerCards))
         setDealerCardCount(calculateCardCount(dealerCards));
+        setDealerShownCount(calculateShownCount(dealerCards));
     }, [playerCards]);
     
     useEffect(() => {
-        calculateBust(playerCardCount)
+        setPlayerBust(calculateBust(playerCardCount))
+        if(isFirstDraw) {
+            if(playerCardCount == 21) {
+                if(dealerCardCount == 21) {
+                    setWinMessage("Push. It's a Tie!");
+                } else {
+                    setWinMessage("BLACKJACK!!!");
+                }
+                var restart = document.getElementById('restart');
+                restart.classList.remove('hidden');
+                setShowFirstCard(true);
+                document.getElementById('dealerCount').innerText = `${dealerCardCount}`;
+            }
+        }
     }, [playerCardCount]);
 
     useEffect(() => {
+        setDealerBust(calculateBust(dealerCardCount))
+    }, [dealerCardCount]);
+
+    useEffect(() => {
         if (playerBust) {
-            alert("Player Busted. Dealer Wins!");
-            resetGame();  // Reset the game
+            setWinMessage("Player Busted. Dealer Wins!");
+            var restart = document.getElementById('restart');
+            restart.classList.remove('hidden');
+            setShowFirstCard(true);
+            document.getElementById('dealerCount').innerText = `${dealerCardCount}`;
         }
     }, [playerBust]);
+
+    useEffect(() => {
+        if (dealerBust) {
+            setWinMessage("Dealer Busted. Player Wins!");
+            var restart = document.getElementById('restart');
+            restart.classList.remove('hidden');
+            setShowFirstCard(true);
+            document.getElementById('dealerCount').innerText = `${dealerCardCount}`;
+        }
+    }, [dealerBust]);
     
 
     const gameStart = () => {
@@ -82,8 +117,11 @@ export default function Blackjack() {
     const drawPlayerCards = () => {
         axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
             .then(response => {
+                if(playerBust != true){
                 const cards = response.data.cards;
                 addPlayerCard(cards[0]);
+                setIsFirstDraw(false)
+                }
             });
             
     };
@@ -91,8 +129,13 @@ export default function Blackjack() {
     const drawDealerCards = () => {
         axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
             .then(response => {
+                if(playerBust != true){
                 const cards = response.data.cards;
-                addDealerCard(cards[0])           
+                addDealerCard(cards[0]);
+                const newDealerCardCount = calculateCardCount([...dealerCards, cards[0]]);
+                setDealerCardCount(newDealerCardCount);
+                calculateBust(newDealerCardCount, false);
+                }
             });
     };
 
@@ -100,7 +143,6 @@ export default function Blackjack() {
         let lowCount = 0;
         let highCount = 0;
         let hasAce = false;
-        let i = 0
         for(const card of cards) {
             if(card.value === 'JACK' || card.value === 'KING' || card.value === 'QUEEN') {
                 lowCount+=10;
@@ -126,9 +168,23 @@ export default function Blackjack() {
    
     }
 
+    const calculateShownCount = (cards) => {
+        let count = 0;
+        if (cards.length > 1) {
+        if(cards[1].value === 'JACK'  || cards[1].value === 'KING' || cards[1].value === 'QUEEN') {
+            count = 10;
+        } else if(cards[1].value === 'ACE') {
+            count = 11;
+        } else {
+            count = Number(cards[1].value);
+        }}
+        return count;
+        
+    }
+
     const calculateBust = (cardCount) => {
         if (cardCount > 21) {
-            setPlayerBust(true);
+            return true;
         }
     }
 
@@ -139,23 +195,68 @@ export default function Blackjack() {
         setDealerBust(false);
         setPlayerCards([]);
         setDealerCards([]);
-        setPlayerCardCount(0)
-        setDealerCardCount(0)
+        setPlayerStand(false)
+        setPlayerCardCount(0);
+        setDealerCardCount(0);
+        setWinMessage('')
+        setShowFirstCard(false);
+        setIsFirstDraw(true);
+        var restart = document.getElementById('restart');
+        restart.classList.add('hidden');
         gameStart();
         });
     }
 
     const stand = () => {
-        //Still Needs if statements for dealer hitting and standing on soft 17
-        if(playerCardCount - 21 > dealerCardCount - 21) {
-            alert("Player Wins!")
-        } else if (playerCardCount - 21 < dealerCardCount - 21){
-            alert("Dealer Wins!")
-        } else {
-            alert("Player and Dealer Tie: Push")
+        setIsDealerTurn(true);
+        setShouldDrawDealerCard(true);
+        
+    };
+
+    const determineWinner = () => {
+        let message = '';
+        if(isFirstDraw) {
+            if(playerCardCount == 21) {
+                if(dealerCardCount == 21) {
+                    message = "Push. It's a Tie!";
+                } else {
+                    message = "BLACKJACK!!!"
+                }
+            }
         }
-        resetGame();
+        if (playerCardCount > 21) {
+            message = "Player Busted. Dealer Wins!";
+        } else if (dealerCardCount > 21) {
+            message = "Dealer Busted. Player Wins!";
+        } else if (playerCardCount > dealerCardCount) {
+            message = "Player Wins!";
+        } else if (playerCardCount < dealerCardCount) {
+            message = "Dealer Wins!";
+        } else {
+            message = "Push. It's a Tie!";
+        }
+        setWinMessage(message);
+        var restart = document.getElementById('restart');
+        restart.classList.remove('hidden');
+        setShowFirstCard(true);
+        document.getElementById('dealerCount').innerText = `${dealerCardCount}`;
     }
+
+    useEffect(() => {
+        if (isDealerTurn && shouldDrawDealerCard) {
+            if (dealerCardCount < 17) {
+                drawDealerCards();
+            } else {
+                setShouldDrawDealerCard(false); // Stop drawing cards
+                // Handle dealer bust or game result here
+                if (dealerCardCount > 21) {
+                    setWinMessage("Dealer Busted. Player Wins!");
+                }
+                determineWinner()
+            }
+        }
+    }, [isDealerTurn, shouldDrawDealerCard, dealerCardCount, dealerCards]);
+    
 
     return(
     <div>
@@ -168,31 +269,36 @@ export default function Blackjack() {
             </ul>
         </div>
         <div class="container" >
-            <h1>Blackjack</h1>
+            <h1 style={{fontSize: 55}}>Blackjack</h1>
             <button id="gameStartButton" onClick={function(event){ gameStart(); toggleHiddenGame()}}>Start Game</button>
             <div id='game' class="hidden">
-            <button onClick={drawPlayerCards}>Hit</button>
-            <button onClick={stand}>Stand</button>
-            <div className="card-container">
-            <div>
-            <div>Player</div>
-            <div class="numberFont">{`${playerCardCount}`}</div>
-            {playerCards.map(playerCard => (
-            <div key={playerCard.code} className="card">
-                <img src={playerCard.image} alt={`${playerCard.value} of ${playerCard.suit}`} />
-            </div> 
-            ))}
-            </div>
-            <div>
-            <div>Dealer</div>
-            <div class="numberFont">{`${dealerCardCount}`}</div>
-            {dealerCards.map(dealerCard => (
-            <div key={dealerCard.code} className="card">
-                <img src={dealerCard.image} alt={`${dealerCard.value} of ${dealerCard.suit}`} />
-            </div>
-            ))}
-            </div>
-            </div>
+                <button onClick={drawPlayerCards}>Hit</button>
+                <button onClick={stand}>Stand</button>
+                <button id='restart' class="hidden" onClick={resetGame}>Restart</button>
+                {winMessage && <div className="win-message" style={{ fontSize: '30px' }}>{winMessage}</div>}
+                <div className="card-container">
+                    <div>
+                        <div style={{fontSize: 25}}>Player</div>
+                        <div style={{fontSize: 37}}>{`${playerCardCount}`}</div>
+                        {playerCards.map(playerCard => (
+                        <div key={playerCard.code} className="card">
+                            <img src={playerCard.image} alt={`${playerCard.value} of ${playerCard.suit}`} />
+                        </div> 
+                        ))}
+                    </div>
+                    <div>
+                        <div style={{fontSize: 25}}>Dealer</div>
+                        <div id="dealerCount" style={{fontSize: 37}}>{`${dealerShownCount}`}</div>
+                        {dealerCards.map((dealerCard, index) => (
+                        <div key={dealerCard.code} className="card">
+                        <img
+                            src={index === 0 && !showFirstCard ? 'https://www.deckofcardsapi.com/static/img/back.png' : dealerCard.image}
+                            alt={`${dealerCard.value} of ${dealerCard.suit}`}
+                        />             
+                        </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
         <div class='row'>
