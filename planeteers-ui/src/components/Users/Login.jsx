@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom'; 
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { UserContext } from '.../UserContext'; // Import the UserContext
 import { 
     MDBContainer, 
     MDBInput, 
@@ -28,16 +27,26 @@ export const Login = (props) => {
             console.log('Login successful:', response.data);
             const token = response.data.token; // Assuming the token is returned in the response
             Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+            history('/home', { state: { username: email } }); 
+            setUser(response.data)
+            localStorage.setItem('user', response.data)
+            console.log(response.data)
 
+        e.preventDefault();
+        const user = { username, password };
+        // send the username and password to the server
+        // const response = await axios.post('/api/user/login', { email, pwHash }
+        // );
+        // set the state of the user
+        // setUser(response.data)
+        // store the user in localStorage
+        // localStorage.setItem('user', response.data)
+        // console.log(response.data)
+                //     history('/home', { state: { username: email } }); 
 
-            setUser({
-                email: response.data.email,
-                token: token,
-                name: response.data.name,
+    //   };
 
-            });
-
-
+            // });
         } catch (error) { 
             console.error('Login failed:', error.response ? error.response.data : error.message); 
             setError('Invalid username or password.'); 

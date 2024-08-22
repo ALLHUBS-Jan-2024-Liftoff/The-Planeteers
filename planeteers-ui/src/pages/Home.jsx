@@ -13,16 +13,20 @@ export default function Home() {
     const username = localStorage.getItem('username');
   
     const handleLogout = () => { 
-        // Perform logout actions here (e.g., clear session, remove authentication token) 
-        // After logout, redirect to the login page 
+        setUser({});
+        setUsername("");
+        setPassword("");
+        localStorage.clear();
         Cookies.remove('token');
-        history('/'); 
+        const navigate = useNavigate(); // Use navigate function to redirect
+        navigate('/login'); 
     }; 
     return (
     <div>
         <div class = "navbar">
             <header>House of Cards
-            
+            <button type="button" onClick={handleLogout}>Logout</button> 
+
             </header>
             <ul>
                 <li>Welcome {username}!</li>

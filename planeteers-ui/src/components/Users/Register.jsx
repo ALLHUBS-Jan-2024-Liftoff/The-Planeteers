@@ -18,7 +18,6 @@ export const Register = (props) => {
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [error, setError] = useState(''); // State to manage error messages 
-    const history = useNavigate();
 
     const onChange = (e) => {
         const currentYear = new Date().getFullYear();
@@ -29,36 +28,33 @@ export const Register = (props) => {
 
     }
     
-    const handleSubmit = async () => { 
-        try { 
-            // Check for empty fields 
-            if (!name || !email || !age || !pwHash || !confirmPwHash ) { 
-                setError('Please fill in all fields.'); 
-                return; 
-            } 
-  
-            if (pwHash !== confirmPwHash) { 
-                throw new Error("Passwords do not match"); 
-            } 
-  
-            const response = await axios.post('/api/user/create', { 
-                name,
-                email,
-                age,
-                pwHash
-            }); 
-            // Handle successful signup 
-            console.log(response.data);
-            console.log('Register and Login successful:', response.data);
-            const token = response.data.token; // Assuming the token is returned in the response
-            Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' }); 
-            history('/home', { state: { username: email } }); 
-        } catch (error) { 
-            // Handle signup error 
-            console.error('Signup failed:', error.response ? error.response.data : error.message); 
-            setError(error.response ? error.response.data : error.message); 
-        } 
-    }; 
+    const handleSubmit = async () => {
+        try {
+          if (!name || !email || !age || !pwHash || !confirmPwHash) {
+            setError('Please fill in all fields.');
+            return;
+          }
+    
+          if (pwHash !== confirmPwHash) {
+            throw new Error('Passwords do not match');
+          }
+    
+          const response = await axios.post('/api/user/create', {
+            name,
+            email,
+            age,
+            pwHash
+          });
+    
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+          Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+          navigate('/home');
+        } catch (error) {
+          setError(error.response ? error.response.data : error.message);
+        }
+      };
+    
 
     return (
         <div className="auth-form-container" >

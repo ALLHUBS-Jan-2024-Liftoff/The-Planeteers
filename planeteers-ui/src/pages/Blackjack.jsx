@@ -260,17 +260,14 @@ export default function Blackjack() {
         }
     }, [isDealerTurn, shouldDrawDealerCard, dealerCardCount, dealerCards]);
 
-    const location = useLocation();
 
-    console.log('Location State:', location.state);
-
-    const username = location.state?.username || "Guest" ;
+    const username = localStorage.getItem('User');
   
     const handleLogout = () => { 
-        // Perform logout actions here (e.g., clear session, remove authentication token) 
-        // After logout, redirect to the login page 
-        Cookies.remove('token');
-        history('/'); 
+        setUser({});
+        setUsername("");
+        setPassword("");
+        localStorage.clear();
     }; 
 
     
