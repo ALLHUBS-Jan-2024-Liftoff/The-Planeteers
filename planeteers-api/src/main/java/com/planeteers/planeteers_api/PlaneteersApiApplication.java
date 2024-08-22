@@ -10,7 +10,6 @@ public class PlaneteersApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PlaneteersApiApplication.class, args);
 
-
 	}
 	// test
 }

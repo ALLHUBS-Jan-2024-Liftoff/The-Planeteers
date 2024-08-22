@@ -36,7 +36,7 @@ export const Login = (props) => {
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100"> 
-            <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}> 
+            <div className="border rounded-lg p-4" style={{width: '1100px', height: 'auto'}}> 
             <header>House of Cards</header>
 
                 <MDBContainer className="p-3"> 
@@ -47,7 +47,9 @@ export const Login = (props) => {
                     <button className="mb-4 d-block btn-primary" style={{ height:'50px',width: '100%' }} onClick={handleLogin}>Sign in</button> 
                     <div>
                     <Link to="/register">
-                <button type="button">Register here</button>
+                <button 
+                    style={{margin: '8px'}}
+                    type="button">Register here</button>
                     </Link>
             <button className = 'button'>Forgot Password?</button>
                         <img src="https://www.dropbox.com/scl/fi/nekcsfp5w9ilj8m2y4a8c/house-of-cards.jpg?rlkey=44v72v56nidvs7o3je7kq1r8q&st=6b27e26t&raw=1" alt="House of Cards" />

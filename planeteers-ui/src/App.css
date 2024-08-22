@@ -66,7 +66,7 @@ img{
   }
 
   .navbar {
-    background-color: #333;
+    background-color: #076e21;
     color: white;
     padding: 1em;
     display: flex;
@@ -255,6 +255,7 @@ img{
     color: black;
   }
 
+
   .emptyspace{
     visibility: hidden;
   }
@@ -262,5 +263,3 @@ img{
   .hidden{
     display: none;
   }
-
-

@@ -21,10 +21,11 @@ export default function Home() {
     return (
     <div>
         <div class = "navbar">
-            <header>Houses Of Cards</header>
+            <header>House of Cards
+            
+            </header>
             <ul>
-                <li>Welcome {username}</li>
-                <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button> 
+                <li>Welcome {username}!</li>
                 </ul>
         </div>
         <div class="emptyspace">.</div>
@@ -47,9 +48,6 @@ export default function Home() {
                 <div>Blackjack</div>
             </Link>
 
-        </div>
-        <div class = "footer">
-            <p>Contact Us</p>
         </div>
     </div>
     )

@@ -9,13 +9,9 @@ import Blackjack  from './pages/Blackjack'
 import CardMatch  from './pages/CardMatch'
 import GameOfWar  from './pages/War'
 import Solitaire  from './pages/Solitaire'
-
 import Userprofile from './pages/Userprofile'
 import Navbar from './components/Navbar/index.jsx';
-
-
 import Contact from './pages/Contact'
-
 
 
 
@@ -31,14 +27,11 @@ export default function App() {
             <Router>
                 <Navbar />
                 <Routes>
-                    <Route index element={<Login />} />
-                    <Route path ="/login"  element={<Login />} />
-                    <Route path ="/register"  element={<Register />} />
-                    <Route path ="/home"  element={<Home />} />
-                    <Route path ="/gamepage"  element={<GamePage />} />
-{/* Uncomment once pages are completed */}
-
-{/*                 <Route path ="/contact"  element={<Contact />} /> */}
+                  <Route index element={<Login />} />
+                  <Route path ="/login"  element={<Login />} />
+                  <Route path ="/register"  element={<Register />} />
+                  <Route path ="/home"  element={<Home />} />
+                  <Route path ="/gamepage"  element={<GamePage />} />
                   <Route path ="/Userprofile"  element={<Userprofile />} />
                   <Route path ="/war"  element={<GameOfWar />} />
                   <Route path ="/solitaire"  element={<Solitaire />} />

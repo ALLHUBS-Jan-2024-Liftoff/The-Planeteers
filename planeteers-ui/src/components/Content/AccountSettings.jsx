@@ -30,30 +30,7 @@ function AccountSettings() {
           placeholder="tcook@apple.com"
         />
       </FormControl>
-      <FormControl id="city">
-        <FormLabel>City</FormLabel>
-        <Select focusBorderColor="brand.blue" placeholder="Select city">
-          <option value="saint louis">Saint Louis</option>
-          <option value="kansas city">Kansas City</option>
-          <option value="philadelphia">Philadelphia</option>
-          <option value="new york" selected>
-            New York
-          </option>
-          <option value="london">London</option>
-          <option value="netherland">Netherland</option>
-          <option value="poland">Poland</option>
-        </Select>
-      </FormControl>
-      <FormControl id="country">
-        <FormLabel>Country</FormLabel>
-        <Select focusBorderColor="brand.blue" placeholder="Select country">
-          <option value="america" selected>
-            America
-          </option>
-          <option value="england">England</option>
-          <option value="poland">Poland</option>
-        </Select>
-      </FormControl>
+      
     </Grid>
   )
 }
