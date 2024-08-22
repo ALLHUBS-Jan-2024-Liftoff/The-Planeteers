@@ -16,11 +16,8 @@ public interface UserService {
 
     public List<User> getAllUsers();
 
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     public User saveUser(User user);
-
-    public User findUserProfileByJwt(String jwt);
 
     public User findUserByEmail(String email) ;
 
@@ -32,5 +29,7 @@ public interface UserService {
 
     Optional<User> updateUser(int id, User user);
 
-//    public String currentUser(String email);
+    void deleteUser(int id);
+
+
 }

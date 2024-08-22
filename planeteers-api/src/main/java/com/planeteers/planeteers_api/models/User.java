@@ -11,12 +11,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class User extends AbstractEntity{
-//    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+public class User extends AbstractEntity implements Serializable {
+    @Transient
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private static final long serialVersionUID = 1L;
+
+
 
 
     @NotNull(message = "Cannot be blank")
@@ -66,10 +71,6 @@ public class User extends AbstractEntity{
         this.pwHash = password;
     }
 
-//    public void setPwHash(String password) {
-//        this.pwHash = encoder.encode(password);
-//    }
-
     public String getName() {
         return name;
     }
@@ -94,6 +95,10 @@ public class User extends AbstractEntity{
         this.age = age;
     }
 
+
+    public boolean isMatchingPassword(String password) {
+        return encoder.matches(password, pwHash);}
+
     public List<Comment> getComments() {
         return comments;
     }
@@ -109,6 +114,7 @@ public class User extends AbstractEntity{
     public void setCredit(Credit credit) {
         this.credit = credit;
     }
+
 
     @Override
     public String toString() {

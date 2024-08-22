@@ -7,12 +7,7 @@ export default function GamePage() {
     return(
     <div>
         <div class = "navbar">
-            <header>House Of Cards</header>
-            <ul>
-                <li>Home</li>
-                <li>Profile</li>
-                <li>Sign Out</li>
-            </ul>
+            <header>House of Cards</header>
         </div>
         <div class="game">
             Game Goes Here
@@ -22,7 +17,6 @@ export default function GamePage() {
         <div class="rating">Rating</div>
         </div>
         <div class="comments">Comments</div>
-        <div class="footer">Contact Us</div>
 
     </div>
     )

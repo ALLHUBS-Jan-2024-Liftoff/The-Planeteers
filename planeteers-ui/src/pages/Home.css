@@ -3,12 +3,14 @@ body{
 }
 
 .navbar {
+    background-color: green;
     position: static;
-    padding: 5px 0;
+    padding: 0px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 50px
+    font-size: 40px;
+    font-weight: 100;
 }
 
 .navbar ul li{
