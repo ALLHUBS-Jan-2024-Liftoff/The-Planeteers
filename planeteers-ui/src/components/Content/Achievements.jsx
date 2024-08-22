@@ -5,8 +5,7 @@ export default function Achievements() {
     return(
     <FormControl>
         <div>
-        <h1>You currently have zero achievements loser!</h1>
-
+        <h1>Achievements go here</h1>
         </div>
     
     
