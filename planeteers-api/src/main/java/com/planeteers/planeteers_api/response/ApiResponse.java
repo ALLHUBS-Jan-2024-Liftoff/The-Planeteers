@@ -1,8 +1,6 @@
 package com.planeteers.planeteers_api.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class ApiResponse {

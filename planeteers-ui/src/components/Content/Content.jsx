@@ -4,6 +4,7 @@ import AccountSettings from './AccountSettings'
 import Actions from './Actions'
 //import Comments from './Comments'
 import Notifications from './Notifications'
+import Achievements from './Achievements'
 
 const Content = () => {
   const tabs = ['Account Settings', 'Achievements', 'Comments']
@@ -46,7 +47,7 @@ const Content = () => {
             <AccountSettings />
           </TabPanel>
           <TabPanel>
-           
+           <Achievements />
           </TabPanel>
           <TabPanel>
             <Notifications />

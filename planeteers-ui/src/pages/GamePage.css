@@ -18,14 +18,14 @@ body{
      font-size: 200px
   }
   .game {
-    width: 900px;
+    width: 930px;
     height: 400px;
     align-items:center;
     text-align:center;
     padding: 30px;
     gap: 20px;
     color: blue;
-        background-color: lightgray;
+
   
   }
   
