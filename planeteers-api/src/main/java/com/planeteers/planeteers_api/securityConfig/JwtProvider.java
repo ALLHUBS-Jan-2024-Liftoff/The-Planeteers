@@ -17,7 +17,6 @@ import java.util.Set;
 
 public class JwtProvider {
     static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-    private static final String SECRET_KEY = "your_secret_key"; // Replace with your secret key
 
 
     public static String generateToken(Authentication auth) {
@@ -26,7 +25,7 @@ public class JwtProvider {
         @SuppressWarnings("deprecation")
         String jwt = Jwts.builder()
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+86400000))
+                .setExpiration(new Date(new Date().getTime() + 86400000))
                 .claim("email", auth.getName())
                 .signWith(key)
                 .compact();
@@ -45,10 +44,10 @@ public class JwtProvider {
 
     private static String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Set<String> auths = new HashSet<>();
-        for(GrantedAuthority authority: authorities) {
+        for (GrantedAuthority authority : authorities) {
             auths.add(authority.getAuthority());
         }
-        return String.join(",",auths);
+        return String.join(",", auths);
     }
 
 //    public Claims getClaimsFromToken(String token) {
@@ -75,10 +74,4 @@ public class JwtProvider {
             return null;
         }
     }
-
-
-
-
-
-
 }

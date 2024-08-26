@@ -7,10 +7,7 @@ import com.planeteers.planeteers_api.response.AuthResponse;
 import com.planeteers.planeteers_api.securityConfig.JwtProvider;
 import com.planeteers.planeteers_api.service.UserService;
 import com.planeteers.planeteers_api.service.UserServiceImpl;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,8 +55,8 @@ public class UserController {
         String fullName = user.getName();
         int age = user.getAge();
 
-        User isEmailExist = userRepository.findByEmail(email);
-        if (isEmailExist != null) {
+         User isEmailExist = userRepository.findByEmail(email);
+        if (isEmailExist != null){
             return new ResponseEntity<>(HttpStatus.CONFLICT); // Example response for email conflict
 
         }
@@ -76,13 +73,12 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = JwtProvider.generateToken(authentication);
 
-
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Register Success");
         authResponse.setUser(savedUser);
         authResponse.setStatus(true);
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
 
     }
 

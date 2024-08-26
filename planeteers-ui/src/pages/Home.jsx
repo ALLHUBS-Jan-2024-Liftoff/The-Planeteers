@@ -25,11 +25,11 @@ export default function Home() {
     <div>
         <div class = "navbar">
             <header>House of Cards
-            <button type="button" onClick={handleLogout}>Logout</button> 
+            {/* <button type="button" onClick={handleLogout}>Logout</button>  */}
 
             </header>
             <ul>
-                <li>Welcome {username}!</li>
+                {/* <li>Welcome {username}!</li> */}
                 </ul>
         </div>
         <div class="emptyspace">.</div>

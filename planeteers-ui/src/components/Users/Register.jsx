@@ -11,13 +11,14 @@ import {
 } from 'mdb-react-ui-kit';
 
 
-export const Register = (props) => {
+export const Register = () => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
     const [confirmPwHash, setConfirmPwHash] = useState(''); 
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [error, setError] = useState(''); // State to manage error messages 
+    const navigate = useNavigate(); // Use useNavigate for navigation
 
     const onChange = (e) => {
         const currentYear = new Date().getFullYear();
@@ -48,8 +49,10 @@ export const Register = (props) => {
     
           const token = response.data.token;
           localStorage.setItem('token', token);
+          localStorage.setItem('user', response.data)
           Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
-          navigate('/home');
+          
+          navigate('/home'); 
         } catch (error) {
           setError(error.response ? error.response.data : error.message);
         }
