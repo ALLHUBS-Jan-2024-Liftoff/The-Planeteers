@@ -1,27 +1,23 @@
 package com.planeteers.planeteers_api.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
+@Entity
 public class PlayerPoint extends AbstractEntity{
 
     private int playerPoint;
 
     @OneToOne(mappedBy = "playerPoint")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "user_id")
     private User user;
 
     public PlayerPoint() {}
 
-    public PlayerPoint(int playerPoint) {
+    public PlayerPoint(int playerPoint, User user) {
         this.playerPoint = playerPoint;
+        this.user = user;
     }
-
     public int getPlayerPoint() {
         return playerPoint;
     }

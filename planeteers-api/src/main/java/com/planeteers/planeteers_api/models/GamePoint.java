@@ -1,19 +1,15 @@
 package com.planeteers.planeteers_api.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
+@Entity
 public class GamePoint extends AbstractEntity{
 
     private int gamePoint;
 
-    @OneToOne(mappedBy = "gamePoint")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @OneToOne(mappedBy = "gamePoint", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private User user;
 
     public GamePoint() {}
@@ -27,8 +23,7 @@ public class GamePoint extends AbstractEntity{
         return gamePoint;
     }
 
-    public void setGamePoint(User user, int gamePoint) {
-        this.user = user;
+    public void setGamePoint(int gamePoint) {
         this.gamePoint = gamePoint;
     }
 
@@ -39,4 +34,12 @@ public class GamePoint extends AbstractEntity{
     public void setUser(User user) {
         this.user = user;
     }
+
+//    @Override
+//    public String toString() {
+//        return "GamePoint{" +
+//                "gamePoint=" + gamePoint +
+//                ", user=" + user +
+//                '}';
+//    }
 }

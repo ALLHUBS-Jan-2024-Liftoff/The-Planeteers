@@ -1,5 +1,6 @@
 package com.planeteers.planeteers_api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,17 +12,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-public class User extends AbstractEntity implements Serializable {
-    @Transient
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private static final long serialVersionUID = 1L;
-
-
+public class User extends AbstractEntity{
+//    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 
     @NotNull(message = "Cannot be blank")
@@ -44,12 +41,27 @@ public class User extends AbstractEntity implements Serializable {
     private final List<Score> scores = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "credit_id", referencedColumnName = "id")
+    @JoinColumn(name = "credit", referencedColumnName = "id")
     private Credit credit;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gamePoint", referencedColumnName = "id")
+    @JsonBackReference
+    private GamePoint gamePoint;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "playerPoint", referencedColumnName = "id")
+    private PlayerPoint playerPoint;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private final List<Comment> comments = new ArrayList<>();
+
+    private String jwtToken;
+
+    // Add a field to store the expiration date of the JWT token
+    private Date tokenExpirationDate;
 
     public User () {}
 
@@ -70,6 +82,10 @@ public class User extends AbstractEntity implements Serializable {
     public void setPwHash(String password) {
         this.pwHash = password;
     }
+
+//    public void setPwHash(String password) {
+//        this.pwHash = encoder.encode(password);
+//    }
 
     public String getName() {
         return name;
@@ -95,10 +111,6 @@ public class User extends AbstractEntity implements Serializable {
         this.age = age;
     }
 
-
-    public boolean isMatchingPassword(String password) {
-        return encoder.matches(password, pwHash);}
-
     public List<Comment> getComments() {
         return comments;
     }
@@ -115,6 +127,37 @@ public class User extends AbstractEntity implements Serializable {
         this.credit = credit;
     }
 
+    public GamePoint getGamePoint() {
+        return gamePoint;
+    }
+
+    public void setGamePoint(GamePoint gamePoint) {
+        this.gamePoint = gamePoint;
+    }
+
+    public PlayerPoint getPlayerPoint() {
+        return playerPoint;
+    }
+
+    public void setPlayerPoint(PlayerPoint playerPoint) {
+        this.playerPoint = playerPoint;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    public Date getTokenExpirationDate() {
+        return tokenExpirationDate;
+    }
+
+    public void setTokenExpirationDate(Date tokenExpirationDate) {
+        this.tokenExpirationDate = tokenExpirationDate;
+    }
 
     @Override
     public String toString() {
@@ -125,8 +168,12 @@ public class User extends AbstractEntity implements Serializable {
                 ", age=" + age +
                 ", pwHash='" + pwHash + '\'' +
                 ", scores=" + scores.size() +
-                ", credit=" + (credit != null ? credit.getId() : null) +
+                ", credit=" + (credit != null ? credit.getUser() : null) +
                 ", comments=" + comments.size() +
+                ", playerPoint" + playerPoint +
+                ", gamePoint=" + gamePoint +
+                ", gamePoint" + jwtToken +
+                ", gamePoint" + tokenExpirationDate +
                 '}';
     }
 
