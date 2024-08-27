@@ -7,7 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Comment extends AbstractEntity{
+public class    Comment extends AbstractEntity{
 
 
     private String description;
