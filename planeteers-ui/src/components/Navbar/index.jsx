@@ -14,7 +14,7 @@ const Navbar = () => {
             <Nav>
                 <Bars />
  
-                {/* <NavMenu> */}
+                <NavMenu>
                     <NavLink to="/home" >
                         Home
                     </NavLink>
@@ -26,7 +26,7 @@ const Navbar = () => {
                     </NavLink> 
                     {/* Second Nav */}
                     {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
-                {/* </NavMenu> */}
+                </NavMenu>
                 <NavBtn>
                     <NavBtnLink to="/login">
                         Sign In

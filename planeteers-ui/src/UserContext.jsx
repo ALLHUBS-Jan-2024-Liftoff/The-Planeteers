@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
-import Cookies from 'js-cookie';  // Ensure this is imported
-import axios from 'axios';  // Ensure this is imported
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const UserContext = createContext();
 
@@ -14,35 +14,45 @@ export const UserProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Retrieve user info from localStorage or cookies
     const token = localStorage.getItem("token") || Cookies.get("token");
     if (token) {
-      axios
-        .get("/api/user/current", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setUser(response.data);
-        })
-        .catch(() => {
-          // Handle error
-          setUser(null);
-        });
+      axios.get("/api/user/current", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setUser(response.data);
+        // Optionally update points if your API provides this information
+        // setPlayerPoints(response.data.playerPoints || 0);
+        // setGamePoints(response.data.gamePoints || 0);
+      })
+      .catch(() => {
+        setUser(null);
+        // localStorage.removeItem("token");
+        // Cookies.remove("token");
+      });
     }
   }, []);
 
   const login = (userData) => {
     setUser(userData);
-    // Save user info to localStorage and cookies
     localStorage.setItem("token", userData.token);
     Cookies.set("token", userData.token, {
       expires: 7,
       secure: true,
       sameSite: "strict",
     });
+    // setPlayerPoints(userData.playerPoints || 0);
+    // setGamePoints(userData.gamePoints || 0);
+    // localStorage.setItem("playerPoints", userData.playerPoints || 0);
+    // localStorage.setItem("gamePoints", userData.gamePoints || 0);
   };
 
   const logout = () => {
+    setUser(null);
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("playerPoints");
+    // localStorage.removeItem("gamePoints");
+
     setUser(null);
     localStorage.removeItem("token");
     Cookies.remove("token");
@@ -56,7 +66,6 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  // Function to update game points
   const updateGamePoints = (points) => {
     setGamePoints(prevPoints => {
       const newPoints = prevPoints + points;
