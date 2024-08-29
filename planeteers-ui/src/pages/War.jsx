@@ -129,5 +129,4 @@ export default function War({user}) {
             </div>
         </div>
     );
-
-export default GameOfWar
+}

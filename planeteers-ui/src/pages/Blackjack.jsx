@@ -120,7 +120,7 @@ export default function Blackjack() {
     const drawPlayerCards = () => {
         axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
             .then(response => {
-                if(playerBust != true){
+                if(playerBust != true && isDealerTurn != true){
                 const cards = response.data.cards;
                 addPlayerCard(cards[0]);
                 setIsFirstDraw(false)
@@ -201,7 +201,8 @@ export default function Blackjack() {
         setPlayerStand(false)
         setPlayerCardCount(0);
         setDealerCardCount(0);
-        setWinMessage('')
+        setWinMessage('');
+        setIsDealerTurn(false);
         setShowFirstCard(false);
         setIsFirstDraw(true);
         var restart = document.getElementById('restart');
