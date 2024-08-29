@@ -9,7 +9,7 @@ import {
     MDBBtn, 
 } from 'mdb-react-ui-kit';
 
-export const Login = (props) => {
+export const Login = () => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
     const [error, setError] = useState(''); 
@@ -24,16 +24,16 @@ export const Login = (props) => {
             } 
   
             const response = await axios.post('/api/user/login', { email, pwHash }); 
-            console.log('Login successful:', response.data);
+            console.log('Login successful:', response.data.user);
             const token = response.data.token; // Assuming the token is returned in the response
             Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
-            history('/home', { state: { username: email } }); 
-            setUser(response.data)
-            localStorage.setItem('user', response.data)
-            console.log(response.data)
+            history('/home'); 
+            // setUser(response.data.user)
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+            console.log(localStorage.getItem("user"))
 
-        e.preventDefault();
-        const user = { username, password };
+      
+        // const user = { username, password };
         // send the username and password to the server
         // const response = await axios.post('/api/user/login', { email, pwHash }
         // );

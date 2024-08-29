@@ -13,6 +13,7 @@ const GameOfWar=()=>{
   const [playerDeckCount, setPlayerDeckCount] = useState(26); // Initial count for a single deck
   const [computerDeckCount, setComputerDeckCount] = useState(26); // Initial count for a single deck
   const [gameOver, setGameOver] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("user"))
 
   // Step 1: Shuffle a new deck on component mount
   useEffect(() => {
@@ -89,7 +90,7 @@ const GameOfWar=()=>{
           <div>
               {playerCard && (
                   <div>
-                      <h2>Player's Card</h2>
+                      <h2>{currentUser?.name}'s Card</h2>
                       <img src={playerCard.image} alt={playerCard.code} />
                   </div>
               )}
