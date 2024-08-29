@@ -49,7 +49,7 @@ export const Register = () => {
     
           const token = response.data.token;
           localStorage.setItem('token', token);
-          localStorage.setItem('user', response.data)
+          localStorage.setItem('user', response.data.user)
           Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
           
           navigate('/home'); 
@@ -57,7 +57,9 @@ export const Register = () => {
           setError(error.response ? error.response.data : error.message);
         }
       };
-    
+ 
+      console.log(localStorage.getItem("user"))
+      console.log(localStorage.getItem("token"))
 
     return (
         <div className="auth-form-container" >
