@@ -52,7 +52,7 @@ const Game = () => {
       }
     }
   };
-  
+
 	const showHowToPlay = () => {
     const howToPlay = document.getElementById('howToPlay');
     if (howToPlay.classList.contains('hidden')) {
@@ -93,6 +93,7 @@ const Game = () => {
                 </p>
                 </div>
             </div>
+            <a href="/comments" className="box comments">Comments</a>
     </div>
     </div>
   );
