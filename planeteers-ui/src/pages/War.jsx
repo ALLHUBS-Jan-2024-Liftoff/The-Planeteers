@@ -15,6 +15,7 @@ const GameOfWar = () => {
     return parseInt(localStorage.getItem("computerDeckCount")) || 26;
   });
   const [gameOver, setGameOver] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("user"))
 
   // Step 1: Shuffle a new deck on component mount
   useEffect(() => {
@@ -120,8 +121,19 @@ const GameOfWar = () => {
         )}
         {computerCard && (
           <div>
-            <h2>Computer's Card</h2>
-            <img src={computerCard.image} alt={computerCard.code} />
+
+              {playerCard && (
+                  <div>
+                      <h2>{currentUser?.name}'s Card</h2>
+                      <img src={playerCard.image} alt={playerCard.code} />
+                  </div>
+              )}
+              {computerCard && (
+                  <div>
+                      <h2>Computer's Card</h2>
+                      <img src={computerCard.image} alt={computerCard.code} />
+                  </div>
+              )}
           </div>
         )}
       </div>

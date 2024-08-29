@@ -88,7 +88,9 @@ export const Register = () => {
           setError('Registration failed due to duplicate emails', error.response ? error.response.data : error.message);
         }
       };
-    
+ 
+      console.log(localStorage.getItem("user"))
+      console.log(localStorage.getItem("token"))
 
     return (
         <div className="auth-form-container" >

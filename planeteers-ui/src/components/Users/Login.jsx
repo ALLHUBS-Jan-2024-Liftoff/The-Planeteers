@@ -9,7 +9,7 @@ import {
     MDBBtn, 
 } from 'mdb-react-ui-kit';
 
-export const Login = (props) => {
+export const Login = () => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
     const [error, setError] = useState(''); 
