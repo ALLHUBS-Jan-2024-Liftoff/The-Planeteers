@@ -270,6 +270,14 @@ export default function Blackjack() {
         localStorage.clear();
     }; 
 
+    const showHowToPlay = () => {
+        const howToPlay = document.getElementById('howToPlay');
+        if (howToPlay.classList.contains('hidden')) {
+            howToPlay.classList.remove('hidden');
+        } else {
+            howToPlay.classList.add('hidden');
+        }
+    };
     
 
     return(
@@ -314,11 +322,16 @@ export default function Blackjack() {
                 </div>
             </div>
         </div>
-        <div class='row'>
-        <div class="howtoplay">How To Play</div>
-        <div class="rating">Rating</div>
+        <div className="container-2">
+            <div className="row">
+                <a onClick={showHowToPlay} className="box howtoplay">How To Play</a>
+                <div id="howToPlay" class="hidden">
+                <p>The goal of the game is to have cards that add up closer to 21 than the dealer. The player and the dealer both draw two cards at the start of each game with the dealers first card being hidden from the player. Number cards are worth their number value and face cards are all worth 10. Aces are special because they are either worth 1 or 11 depending on which brings you closer to 21 without going over. If your cards go over 21 you bust and you lose automatically but the same is true for the dealer. You are allowed to hit to draw more cards as many times as you would like as long as your cards are not over 21 and you may stand at any point to stop drawing and let the dealer draw their cards. The dealer follows special rules when it is their turn; the dealer will keep hitting until their cards are worth atleast 17 or they bust. Now that you know the rules good luck!</p>
+                </div>
+            </div>
+    <a href="/comments" className="box comments">Comments</a>
         </div>
-        <div class="comments">Comments</div>
+		
     </div>
     )
 }
