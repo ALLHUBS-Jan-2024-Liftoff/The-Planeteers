@@ -1,5 +1,5 @@
 import './Home.css'
-import { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios"
 
 export default function War({user}) {
@@ -129,4 +129,5 @@ export default function War({user}) {
             </div>
         </div>
     );
-}
+
+export default GameOfWar

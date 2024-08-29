@@ -11,14 +11,14 @@ import {
 } from 'mdb-react-ui-kit';
 
 
-export const Register = (props) => {
+export const Register = () => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
     const [confirmPwHash, setConfirmPwHash] = useState(''); 
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [error, setError] = useState(''); // State to manage error messages 
-    const history = useNavigate();
+    const navigate = useNavigate(); // Use useNavigate for navigation
 
     const onChange = (e) => {
         const currentYear = new Date().getFullYear();
@@ -29,36 +29,37 @@ export const Register = (props) => {
 
     }
     
-    const handleSubmit = async () => { 
-        try { 
-            // Check for empty fields 
-            if (!name || !email || !age || !pwHash || !confirmPwHash ) { 
-                setError('Please fill in all fields.'); 
-                return; 
-            } 
-  
-            if (pwHash !== confirmPwHash) { 
-                throw new Error("Passwords do not match"); 
-            } 
-  
-            const response = await axios.post('/api/user/create', { 
-                name,
-                email,
-                age,
-                pwHash
-            }); 
-            // Handle successful signup 
-            console.log(response.data);
-            console.log('Register and Login successful:', response.data);
-            const token = response.data.token; // Assuming the token is returned in the response
-            Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' }); 
-            history('/home', { state: { username: email } }); 
-        } catch (error) { 
-            // Handle signup error 
-            console.error('Signup failed:', error.response ? error.response.data : error.message); 
-            setError(error.response ? error.response.data : error.message); 
-        } 
-    }; 
+    const handleSubmit = async () => {
+        try {
+          if (!name || !email || !age || !pwHash || !confirmPwHash) {
+            setError('Please fill in all fields.');
+            return;
+          }
+    
+          if (pwHash !== confirmPwHash) {
+            throw new Error('Passwords do not match');
+          }
+    
+          const response = await axios.post('/api/user/create', {
+            name,
+            email,
+            age,
+            pwHash
+          });
+    
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', response.data.user)
+          Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+          
+          navigate('/home'); 
+        } catch (error) {
+          setError(error.response ? error.response.data : error.message);
+        }
+      };
+ 
+      console.log(localStorage.getItem("user"))
+      console.log(localStorage.getItem("token"))
 
     return (
         <div className="auth-form-container" >
