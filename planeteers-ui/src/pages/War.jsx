@@ -75,6 +75,15 @@ export default function War({user}) {
         }
     };
 
+    const showHowToPlay = () => {
+        const howToPlay = document.getElementById('howToPlay');
+        if (howToPlay.classList.contains('hidden')) {
+            howToPlay.classList.remove('hidden');
+        } else {
+            howToPlay.classList.add('hidden');
+        }
+    };
+    
     return (
         <div>
             <div className="navbar">
@@ -110,14 +119,13 @@ export default function War({user}) {
 
           
             <div className="container-2">
-    <div className="row">
-        <a href="/how-to-play" className="box howtoplay">How To Play</a>
-        {/* <a href="/rating" className="box rating">Rating</a> */}
-    </div>
-    <a href="/comments" className="box comments">Comments</a>
-    {/* <a href="/contact-us" className="box footer">Contact Us</a> */}
-</div>
-
+                <div className="row">
+                    <a onClick={showHowToPlay} className="box howtoplay">How To Play</a>
+                    <div id="howToPlay" class="hidden">
+                    <p>The goal of the game is to get all of your opponents cards. The player and the computer will both draw a card simultaneuously and then both cards are compared. Whoever has the higher value card wins the round and takes the cards. Cards are valued with Aces as the highest followed by Kings, Queens, Jacks, and then numbers going down.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
