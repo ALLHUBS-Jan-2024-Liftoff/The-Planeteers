@@ -44,8 +44,8 @@ public class User extends AbstractEntity{
     @JoinColumn(name = "credit", referencedColumnName = "id")
     private Credit credit;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gamePoint", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "game_point_id", referencedColumnName = "id")  // Referring to the ID column in GamePoint
     @JsonBackReference
     private GamePoint gamePoint;
 

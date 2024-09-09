@@ -89,8 +89,8 @@ export const Register = () => {
         }
       };
  
-      console.log(localStorage.getItem("user"))
-      console.log(localStorage.getItem("token"))
+      // console.log(localStorage.getItem("user"))
+      // console.log(localStorage.getItem("token"))
 
     return (
         <div className="auth-form-container" >

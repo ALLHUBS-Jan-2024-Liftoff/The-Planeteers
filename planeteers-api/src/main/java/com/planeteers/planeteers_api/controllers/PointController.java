@@ -42,47 +42,29 @@ public class PointController {
 
     @PostMapping("/gamePoints/saveOrUpdate")
     public ResponseEntity<?> saveOrUpdateGamePoints(@RequestBody @Valid PointDTO pointDTO) {
-        // Find the user by ID
         User user = userRepository.findById(pointDTO.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + pointDTO.getUserId()));
 
-        // Retrieve the existing GamePoint or create a new one if it doesn't exist
         GamePoint gamePoint = user.getGamePoint();
         if (gamePoint == null) {
             gamePoint = new GamePoint();
             gamePoint.setUser(user);
         }
-        System.out.println(gamePoint.getGamePoint());
 
-        // Update the gamePoint value with the one from PointDTO
+        // Update the gamePoint value
         gamePoint.setGamePoint(pointDTO.getGamePoint());
-        System.out.println(gamePoint.getGamePoint());
 
         try {
-            // Save or update the GamePoint entity
             gamePoint = gamePointRepository.save(gamePoint);
-
-            System.out.println(gamePoint.getGamePoint());
-
-
-            // Associate the saved GamePoint with the User
             user.setGamePoint(gamePoint);
-
-            System.out.println(user.getGamePoint());
-
             userRepository.save(user);
 
-            System.out.println(gamePoint.getGamePoint());
-            System.out.println(user.getGamePoint());
-
-
-            // Return the updated GamePoint entity
             return new ResponseEntity<>(gamePoint, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
+
 
 
 

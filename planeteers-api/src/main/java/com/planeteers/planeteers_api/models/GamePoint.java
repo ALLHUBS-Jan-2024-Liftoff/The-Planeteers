@@ -8,7 +8,7 @@ public class GamePoint extends AbstractEntity{
 
     private int gamePoint;
 
-    @OneToOne(mappedBy = "gamePoint", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "gamePoint")
     @JsonManagedReference
     private User user;
 

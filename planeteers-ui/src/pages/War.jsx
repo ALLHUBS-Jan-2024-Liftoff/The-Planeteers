@@ -17,6 +17,24 @@ const GameOfWar = () => {
   const [gameOver, setGameOver] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem("user"))
 
+  useEffect(() => {
+    if (user) {
+      axios.get(`/points/playerPoints/${user.id}`)
+        .then(response => {
+          setPlayerPoints(response.data.playerPoint);
+          updatePlayerPoints(response.data.playerPoint);
+        })
+        .catch(error => console.error('Error fetching player points:', error));
+
+      axios.get(`/points/gamePoints/${user.id}`)
+        .then(response => {
+          setGamePoints(response.data.gamePoint);
+          updateGamePoints(response.data.gamePoint);
+        })
+        .catch(error => console.error('Error fetching game points:', error));
+    }
+  }, [user, updatePlayerPoints, updateGamePoints]);
+
   // Step 1: Shuffle a new deck on component mount
   useEffect(() => {
     axios.get('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
@@ -27,6 +45,9 @@ const GameOfWar = () => {
 
   // Step 2: Draw two cards, one for the player and one for the computer
   const drawCards = () => {
+    if (playerPoints < 0){
+    return ("Not enough Player Points to play")} 
+    else 
     updatePlayerPoints(-2); // Update points using context function
     if (gameOver) return; // Prevent drawing if the game is over
 
@@ -74,6 +95,9 @@ const GameOfWar = () => {
       });
       updatePlayerPoints(5); // Update points using context function
       updateGamePoints(5); // Update points using context function
+      
+
+
     } else if (playerValue < computerValue) {
       setWinner('Computer Wins!');
       setPlayerDeckCount(prevCount => {
@@ -91,6 +115,15 @@ const GameOfWar = () => {
     }
 
     checkGameOver();
+    axios.post('/points/playerPoints/saveOrUpdate', {
+      userId: user.id,
+      playerPoint: newPlayerPoints
+  }).catch(error => console.error('Error updating player points:', error));
+
+  axios.post('/points/gamePoints/saveOrUpdate', {
+      userId: user.id,
+      gamePoint: newGamePoints
+  }).catch(error => console.error('Error updating game points:', error));
   };
 
   const checkGameOver = () => {

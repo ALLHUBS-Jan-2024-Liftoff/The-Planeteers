@@ -11,7 +11,7 @@ import {
 } from "./NavbarElements";
 
 const NavBar = () => {
-    const navigate = useNavigate();  // Use navigate hook here
+    const navigate = useNavigate();  
     const currentUser = JSON.parse(localStorage.getItem("user"));
     
     const handleLogout = () => {
@@ -31,40 +31,33 @@ const NavBar = () => {
                 <Bars />
 
                 <NavMenu>
-                    <NavLink to="/home" >
+                    <NavLink to="/home">
                         Home
                     </NavLink>
-                    <NavLink to="/userprofile" activeStyle>
+                    <NavLink to="/userprofile">
                         Profile
                     </NavLink>
-                    <NavLink to="/contact" activeStyle>
+                    <NavLink to="/contact">
                         Contact Us
-                    </NavLink> 
-                    {/* Second Nav */}
-                    {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
-                </NavMenu>
-                <NavBtn>
-                    <NavBtnLink to="/login">
-                        Sign In
-                    </NavBtnLink>
-                </NavBtn>
                     </NavLink>
                 </NavMenu>
+
                 {!currentUser ? (
                     <NavBtn>
                         <NavBtnLink to="/login">Sign In</NavBtnLink>
                     </NavBtn>
                 ) : (
                     <NavBtn>
-                        {/* <button  style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
-                            Log out
-                        </button> */}
-                        <NavBtnLink onClick={handleLogout}> Log Out</NavBtnLink>
+                        <NavBtnLink as="button" onClick={handleLogout}>
+                            Log Out
+                        </NavBtnLink>
                     </NavBtn>
                 )}
+
                 {currentUser && <h3>Welcome Back {currentUser.name}</h3>}
             </Nav>
         </>
     );
 };
-export default NavBar
+
+export default NavBar;
