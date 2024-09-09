@@ -1,8 +1,10 @@
 import './Home.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios"
 import { useNavigate,Link, useLocation } from "react-router-dom";
 import Cookies from 'js-cookie';
+import UserContext from "./../UserContext"; // Import the UserContext
+
 
 
         
@@ -12,6 +14,7 @@ export default function Blackjack() {
 
     
     //Initialize the Use States
+    const { user ,playerPoints, gamePoints, updatePlayerPoints, updateGamePoints } = useContext(UserContext); // Get points and update functions from context
     const [deckId, setDeckId] = useState('');
     const [playerCards, setPlayerCards] = useState([]);
     const [dealerCards, setDealerCards] = useState([]);
@@ -206,6 +209,7 @@ export default function Blackjack() {
         setIsFirstDraw(true);
         var restart = document.getElementById('restart');
         restart.classList.add('hidden');
+        updatePlayerPoints(-2); // Update points using context function
         gameStart();
         });
     }
@@ -223,6 +227,8 @@ export default function Blackjack() {
                 if(dealerCardCount == 21) {
                     message = "Push. It's a Tie!";
                 } else {
+                    updatePlayerPoints(5); // Update points
+                    updateGamePoints(5); // Update points
                     message = "BLACKJACK!!!"
                 }
             }
@@ -230,6 +236,8 @@ export default function Blackjack() {
         if (playerCardCount > 21) {
             message = "Player Busted. Dealer Wins!";
         } else if (dealerCardCount > 21) {
+            updatePlayerPoints(5); // Update points
+            updateGamePoints(5); // Update points
             message = "Dealer Busted. Player Wins!";
         } else if (playerCardCount > dealerCardCount) {
             message = "Player Wins!";
@@ -253,6 +261,8 @@ export default function Blackjack() {
                 setShouldDrawDealerCard(false); // Stop drawing cards
                 // Handle dealer bust or game result here
                 if (dealerCardCount > 21) {
+                    updatePlayerPoints(5); // Update points
+                    updateGamePoints(5); // Update points
                     setWinMessage("Dealer Busted. Player Wins!");
                 }
                 determineWinner()
@@ -285,7 +295,11 @@ export default function Blackjack() {
         <div class = "navbar">
             <header>House Of Cards</header>
             <ul>
-            <li>Welcome {username}</li>
+            <li>Welcome, {user ? user.email : 'Guest'}!</li>
+            <li>Game Points: {gamePoints}</li>
+             <li>Player Points: {playerPoints}</li>
+             </ul>
+             <ul>
             <button type="button" onClick={handleLogout}>Logout</button> 
             </ul>
         </div>

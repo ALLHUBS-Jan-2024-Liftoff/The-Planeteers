@@ -28,6 +28,34 @@ export const Register = () => {
             return setAge(age);
 
     }
+
+    const hasLoggedInToday = () => {
+      const lastLogin = localStorage.getItem('lastLoginDate');
+      const today = new Date().toLocaleDateString();
+      return lastLogin === today;
+  };
+
+    const awardDailyLoginPoints = () => {
+      if (!hasLoggedInToday()) {
+          const dailyPoints = 100; // Set the number of points you want to award
+
+          // Get the current game points from localStorage
+          let playerPoints = parseInt(localStorage.getItem('gamePoints')) || 0;
+
+          // Add daily points
+          playerPoints += dailyPoints;
+
+          // Save the new points total to localStorage
+          localStorage.setItem('playerPoints', playerPoints);
+
+          // Update the last login date
+          localStorage.setItem('lastLoginDate', new Date().toLocaleDateString());
+
+          console.log(`You've been awarded ${dailyPoints} player points!`);
+      } else {
+          console.log('You have already received your daily login points today.');
+      }
+  };
     
     const handleSubmit = async () => {
         try {
@@ -49,12 +77,15 @@ export const Register = () => {
     
           const token = response.data.token;
           localStorage.setItem('token', token);
-          localStorage.setItem('user', response.data.user)
+          localStorage.setItem('username', email);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+          awardDailyLoginPoints();
           Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
           
           navigate('/home'); 
         } catch (error) {
-          setError(error.response ? error.response.data : error.message);
+          console.error('Registration failed', error.response ? error.response.data : error.message); 
+          setError('Registration failed due to duplicate emails', error.response ? error.response.data : error.message);
         }
       };
  

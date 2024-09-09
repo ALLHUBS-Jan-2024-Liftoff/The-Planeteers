@@ -13,7 +13,35 @@ export const Login = () => {
     const [email, setEmail] = useState('');
     const [pwHash, setPwHash] = useState('');
     const [error, setError] = useState(''); 
-    const history = useNavigate(); 
+    const navigate = useNavigate(); // Use useNavigate for navigation
+
+    const hasLoggedInToday = () => {
+        const lastLogin = localStorage.getItem('lastLoginDate');
+        const today = new Date().toLocaleDateString();
+        return lastLogin === today;
+    };
+  
+      const awardDailyLoginPoints = () => {
+        if (!hasLoggedInToday()) {
+            const dailyPoints = 100; // Set the number of points you want to award
+  
+            // Get the current game points from localStorage
+            let playerPoints = parseInt(localStorage.getItem('gamePoints')) || 0;
+  
+            // Add daily points
+            playerPoints += dailyPoints;
+  
+            // Save the new points total to localStorage
+            localStorage.setItem('playerPoints', playerPoints);
+  
+            // Update the last login date
+            localStorage.setItem('lastLoginDate', new Date().toLocaleDateString());
+  
+            console.log(`You've been awarded ${dailyPoints} player points!`);
+        } else {
+            console.log('You have already received your daily login points today.');
+        }
+    };
    
     const handleLogin = async () => { 
 
@@ -24,29 +52,16 @@ export const Login = () => {
             } 
   
             const response = await axios.post('/api/user/login', { email, pwHash }); 
-            console.log('Login successful:', response.data.user);
-            const token = response.data.token; // Assuming the token is returned in the response
+            console.log('Login successful:', response.data);
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', email);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            awardDailyLoginPoints();
             Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
-            history('/home'); 
-            // setUser(response.data.user)
-            localStorage.setItem('user', JSON.stringify(response.data.user))
-            console.log(localStorage.getItem("user"))
+          
+            navigate('/home'); 
 
-      
-        // const user = { username, password };
-        // send the username and password to the server
-        // const response = await axios.post('/api/user/login', { email, pwHash }
-        // );
-        // set the state of the user
-        // setUser(response.data)
-        // store the user in localStorage
-        // localStorage.setItem('user', response.data)
-        // console.log(response.data)
-                //     history('/home', { state: { username: email } }); 
-
-    //   };
-
-            // });
         } catch (error) { 
             console.error('Login failed:', error.response ? error.response.data : error.message); 
             setError('Invalid username or password.'); 

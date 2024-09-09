@@ -29,6 +29,7 @@ const NavBar = () => {
         <>
             <Nav>
                 <Bars />
+
                 <NavMenu>
                     <NavLink to="/home" >
                         Home
@@ -38,6 +39,15 @@ const NavBar = () => {
                     </NavLink>
                     <NavLink to="/contact" activeStyle>
                         Contact Us
+                    </NavLink> 
+                    {/* Second Nav */}
+                    {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
+                </NavMenu>
+                <NavBtn>
+                    <NavBtnLink to="/login">
+                        Sign In
+                    </NavBtnLink>
+                </NavBtn>
                     </NavLink>
                 </NavMenu>
                 {!currentUser ? (
