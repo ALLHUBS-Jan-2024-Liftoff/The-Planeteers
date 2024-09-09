@@ -21,4 +21,7 @@ public interface CommentService {
     Optional<Comment> updateComment(int id, CommentDTO commentDTO);
 
     public void deleteComment(int id);
+
+    CommentDTO toCommentDTO(Comment comment);
+
 }

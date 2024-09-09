@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @Controller
@@ -32,8 +33,15 @@ public class CommentController {
 
 
     @GetMapping("/")
-    public List<Comment> index(){
-        return commentService.getAllComments();
+    public ResponseEntity<?> getAllComments() {
+        List<Comment> comments = commentService.getAllComments();
+
+        // Map each Comment to CommentDTO
+        List<CommentDTO> commentDTOs = comments.stream()
+                .map(commentService::toCommentDTO)  // Using the toCommentDTO method from the service
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(commentDTOs);
     }
 
     @PostMapping("create")
@@ -57,13 +65,17 @@ public class CommentController {
 
     }
     @GetMapping("{id}")
-    public ResponseEntity<?> findComment(@PathVariable Integer id ){
-        Optional<Comment> optComment = commentService.getCommentById(id);
-        if(optComment.isPresent()){
-            return  ResponseEntity.ok(optComment.get());
+    public ResponseEntity<?> findComment(@PathVariable Integer id) {
+        Optional<Comment> comment = commentService.getCommentById(id);
+
+        if (comment.isPresent()) {
+            CommentDTO commentDTO = commentService.toCommentDTO(comment.get());  // Get the Comment object
+            return ResponseEntity.ok(commentDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This comment could not be found");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This comment could not me found");
     }
+
 
 
     @PutMapping("edit/{id}")
