@@ -45,7 +45,7 @@ public class Comment extends AbstractEntity{
     public String toString() {
         return "Comment{" +
                 "description='" + description + '\'' +
-                ", userId=" + (user != null ? user.getId() : null) +
+                ", user_id=" + (user.getId()) +
                 '}';
     }
 }
