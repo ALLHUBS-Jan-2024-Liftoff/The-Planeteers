@@ -71,4 +71,13 @@ public class CommentServiceImpl implements CommentService {
            throw new EntityNotFoundException("Comment not found");
        }
     }
+
+    public CommentDTO toCommentDTO(Comment comment) {
+        CommentDTO dto = new CommentDTO();
+        dto.setId(comment.getId());
+        dto.setDescription(comment.getDescription());
+        dto.setUserId(comment.getUser().getId());
+        return dto;
+    }
+
 }

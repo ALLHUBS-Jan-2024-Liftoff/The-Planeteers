@@ -216,26 +216,7 @@ public class UserController {
         return "Current user: " + currentUserEmail;
     }
 
-//    private String getTokenFromHeader(HttpServletRequest request) {
-//        String authHeader = request.getHeader("Authorization");
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            return authHeader.substring(7); // Remove "Bearer " prefix
-//        }
-//        return null;
-//    }
-//
-//    @PostMapping("/storeSessionData")
-//    public String storeSessionData(HttpSession session, @RequestParam String data) {
-//        // Store data in session
-//        session.setAttribute("userData", data);
-//        return "Data stored in session";
-//    }
-//
-//    @GetMapping("/retrieveSessionData")
-//    public String retrieveSessionData(HttpSession session) {
-//        // Retrieve data from session
-//        String data = (String) session.getAttribute("userData");
-//        return "Stored data: " + data;
+
     }
 
 

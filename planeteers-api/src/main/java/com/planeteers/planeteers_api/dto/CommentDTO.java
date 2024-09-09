@@ -7,6 +7,7 @@ public class CommentDTO {
     @NotNull(message = "description can not be null")
     private String description;
 
+    private Integer id;
     @NotNull(message = "user id can not be null")
     @JsonProperty("user_id")
     private Integer userId;
@@ -27,5 +28,12 @@ public class CommentDTO {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

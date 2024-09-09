@@ -1,6 +1,7 @@
 package com.planeteers.planeteers_api.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -16,7 +17,7 @@ public class Comment extends AbstractEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private User user;
 
     public Comment(String description, User user) {
@@ -45,7 +46,7 @@ public class Comment extends AbstractEntity{
     public String toString() {
         return "Comment{" +
                 "description='" + description + '\'' +
-                ", userId=" + (user != null ? user.getId() : null) +
+                ", user_id=" + (user.getId()) +
                 '}';
     }
 }
