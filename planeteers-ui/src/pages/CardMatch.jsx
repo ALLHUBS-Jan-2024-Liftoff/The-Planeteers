@@ -57,8 +57,17 @@ const Game = () => {
       }
     }
   };
-
+  
+	const showHowToPlay = () => {
+    const howToPlay = document.getElementById('howToPlay');
+    if (howToPlay.classList.contains('hidden')) {
+        howToPlay.classList.remove('hidden');
+    } else {
+        howToPlay.classList.add('hidden');
+    }
+};
   return (
+    <div>
     <div id="GamePage" className="game">
     <h1>You have {matchedPairs.length/2} pairs!</h1>
     <ul>
@@ -86,6 +95,16 @@ const Game = () => {
         </Card>
         
       ))}
+    </div>
+    <div className="container-2">
+            <div className="row">
+                <a onClick={showHowToPlay} className="box howtoplay">How To Play</a>
+                <div id="howToPlay" class="hidden">
+                <p>The goal of the game is to match all of the pairs of cards. There are 12 cards on the table so there are 6 pairs to match. The cards will stay in the same spot so its a test of your memory and recall to keep track of where they all are. Good Luck.
+                </p>
+                </div>
+            </div>
+    </div>
     </div>
   );
 };

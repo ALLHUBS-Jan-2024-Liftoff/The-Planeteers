@@ -53,15 +53,4 @@ const router = createBrowserRouter(
   )
 );
 
-
-
-  return (
-    <UserProvider>
-      <RouterProvider router={router}>
-      
-      </RouterProvider>
-    </UserProvider>
-  );
-}
-
 export default App;
