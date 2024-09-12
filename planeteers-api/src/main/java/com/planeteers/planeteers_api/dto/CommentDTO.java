@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 
 public class CommentDTO {
+
     @NotNull(message = "description can not be null")
     private String description;
 
@@ -16,6 +17,8 @@ public class CommentDTO {
     public String getDescription() {
         return description;
     }
+
+
 
     public void setDescription(String description) {
         this.description = description;

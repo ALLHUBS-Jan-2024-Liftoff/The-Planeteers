@@ -47,8 +47,11 @@ public class CommentController {
         }
 
         try{
-            commentService.saveComment(commentDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(commentDTO);
+            Comment savedComment = commentService.saveComment(commentDTO);
+
+            System.out.println("Persisted Comment ID: " + savedComment.getId());
+//            commentService.saveComment(commentDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
 
         } catch (Exception e){
           return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

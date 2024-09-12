@@ -1,6 +1,7 @@
 package com.planeteers.planeteers_api.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -44,8 +45,9 @@ public class Comment extends AbstractEntity{
     @Override
     public String toString() {
         return "Comment{" +
-                "description='" + description + '\'' +
-                ", userId=" + (user != null ? user.getId() : null) +
+                "id=" + getId() +
+                ", description='" + description + '\'' +
+                ", userId=" + getUser() +
                 '}';
     }
 }
