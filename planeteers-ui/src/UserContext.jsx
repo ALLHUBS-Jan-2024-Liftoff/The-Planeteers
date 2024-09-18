@@ -6,62 +6,45 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [playerPoints, setPlayerPoints] = useState(() => {
-    return parseInt(localStorage.getItem("playerPoints")) || 0;
-  });
-  const [gamePoints, setGamePoints] = useState(() => {
-    return parseInt(localStorage.getItem("gamePoints")) || 0;
-  });
+  const [playerPoints, setPlayerPoints] = useState(() => parseInt(localStorage.getItem("playerPoints")) || 0);
+  const [gamePoints, setGamePoints] = useState(() => parseInt(localStorage.getItem("gamePoints")) || 0);
 
   useEffect(() => {
     const token = localStorage.getItem("token") || Cookies.get("token");
     if (token) {
-      axios.get("/api/user/current", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setUser(response.data);
-        // Optionally update points if your API provides this information
-        // setPlayerPoints(response.data.playerPoints || 0);
-        // setGamePoints(response.data.gamePoints || 0);
-      })
-      .catch(() => {
-        setUser(null);
-        // localStorage.removeItem("token");
-        // Cookies.remove("token");
-      });
+      axios.get("/api/user/current", { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => {
+          setUser(response.data);
+          if (response.data.playerPoints) {
+            setPlayerPoints(response.data.playerPoints);
+            localStorage.setItem("playerPoints", response.data.playerPoints);
+          }
+          if (response.data.gamePoints) {
+            setGamePoints(response.data.gamePoints);
+            localStorage.setItem("gamePoints", response.data.gamePoints);
+          }
+        })
+        .catch(() => setUser(null));
     }
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("token", userData.token);
-    Cookies.set("token", userData.token, {
-      expires: 7,
-      secure: true,
-      sameSite: "strict",
-    });
-    // setPlayerPoints(userData.playerPoints || 0);
-    // setGamePoints(userData.gamePoints || 0);
-    // localStorage.setItem("playerPoints", userData.playerPoints || 0);
-    // localStorage.setItem("gamePoints", userData.gamePoints || 0);
-  };
-
-  const logout = () => {
-    setUser(null);
-    // localStorage.removeItem("token");
-    // localStorage.removeItem("playerPoints");
-    // localStorage.removeItem("gamePoints");
-
-    setUser(null);
-    localStorage.removeItem("token");
-    Cookies.remove("token");
+  const syncPointsWithBackend = async () => {
+    const token = localStorage.getItem("token") || Cookies.get("token");
+    if (token && user) {
+      try {
+        await axios.post('/points/gamePoints/saveOrUpdate', { userId: user.id, gamePoint: gamePoints }, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.post('/points/playerPoints/saveOrUpdate', { userId: user.id, playerPoint: playerPoints }, { headers: { Authorization: `Bearer ${token}` } });
+      } catch (error) {
+        console.error("Error syncing points with backend:", error);
+      }
+    }
   };
 
   const updatePlayerPoints = (points) => {
     setPlayerPoints(prevPoints => {
       const newPoints = prevPoints + points;
       localStorage.setItem("playerPoints", newPoints);
+      syncPointsWithBackend();
       return newPoints;
     });
   };
@@ -70,12 +53,13 @@ export const UserProvider = ({ children }) => {
     setGamePoints(prevPoints => {
       const newPoints = prevPoints + points;
       localStorage.setItem("gamePoints", newPoints);
+      syncPointsWithBackend();
       return newPoints;
     });
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, playerPoints, gamePoints, updatePlayerPoints, updateGamePoints }}>
+    <UserContext.Provider value={{ user, playerPoints, gamePoints, updatePlayerPoints, updateGamePoints }}>
       {children}
     </UserContext.Provider>
   );

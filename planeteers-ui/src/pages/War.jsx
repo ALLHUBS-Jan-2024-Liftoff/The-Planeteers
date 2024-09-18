@@ -1,129 +1,74 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import UserContext from "./../UserContext"; // Import the UserContext
+import UserContext from "./../UserContext";
 
 const GameOfWar = () => {
-  const { user ,playerPoints, gamePoints, updatePlayerPoints, updateGamePoints } = useContext(UserContext); // Get points and update functions from context
+  const { user, playerPoints, gamePoints, updatePlayerPoints, updateGamePoints } = useContext(UserContext);
   const [deckId, setDeckId] = useState('');
   const [playerCard, setPlayerCard] = useState(null);
   const [computerCard, setComputerCard] = useState(null);
   const [winner, setWinner] = useState('');
-  const [playerDeckCount, setPlayerDeckCount] = useState(() => {
-    return parseInt(localStorage.getItem("playerDeckCount")) || 26;
-  });
-  const [computerDeckCount, setComputerDeckCount] = useState(() => {
-    return parseInt(localStorage.getItem("computerDeckCount")) || 26;
-  });
+  const [playerDeckCount, setPlayerDeckCount] = useState(() => parseInt(localStorage.getItem("playerDeckCount")) || 26);
+  const [computerDeckCount, setComputerDeckCount] = useState(() => parseInt(localStorage.getItem("computerDeckCount")) || 26);
   const [gameOver, setGameOver] = useState(false);
-  const currentUser = JSON.parse(localStorage.getItem("user"))
-
+  
   useEffect(() => {
-    if (user) {
-      axios.get(`/points/playerPoints/${user.id}`)
-        .then(response => {
-          setPlayerPoints(response.data.playerPoint);
-          updatePlayerPoints(response.data.playerPoint);
-        })
-        .catch(error => console.error('Error fetching player points:', error));
-
-      axios.get(`/points/gamePoints/${user.id}`)
-        .then(response => {
-          setGamePoints(response.data.gamePoint);
-          updateGamePoints(response.data.gamePoint);
-        })
-        .catch(error => console.error('Error fetching game points:', error));
-    }
-  }, [user, updatePlayerPoints, updateGamePoints]);
-
-  // Step 1: Shuffle a new deck on component mount
-  useEffect(() => {
+    // Step 1: Shuffle a new deck on component mount
     axios.get('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-      .then(response => {
-        setDeckId(response.data.deck_id);
-      });
+      .then(response => setDeckId(response.data.deck_id))
+      .catch(error => console.error("Error fetching deck:", error));
   }, []);
 
-  // Step 2: Draw two cards, one for the player and one for the computer
   const drawCards = () => {
-    if (playerPoints < 0){
-    return ("Not enough Player Points to play")} 
-    else 
-    updatePlayerPoints(-2); // Update points using context function
+    if (playerPoints < 0) return "Not enough Player Points to play"; // Prevent play if not enough points
     if (gameOver) return; // Prevent drawing if the game is over
 
+    updatePlayerPoints(-2); // Deduct points for each play
+    
+    // Draw cards for both player and computer
     axios.get(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
       .then(response => {
         const cards = response.data.cards;
         setPlayerCard(cards[0]);
         setComputerCard(cards[1]);
         determineWinner(cards[0], cards[1]);
-      });
+      })
+      .catch(error => console.error("Error drawing cards:", error));
   };
 
-  // Step 3: Determine the winner
   const determineWinner = (playerCard, computerCard) => {
-    const cardValues = {
-      'ACE': 14,
-      'KING': 13,
-      'QUEEN': 12,
-      'JACK': 11,
-      '10': 10,
-      '9': 9,
-      '8': 8,
-      '7': 7,
-      '6': 6,
-      '5': 5,
-      '4': 4,
-      '3': 3,
-      '2': 2
-    };
-
+    const cardValues = { 'ACE': 14, 'KING': 13, 'QUEEN': 12, 'JACK': 11, '10': 10, '9': 9, '8': 8, '7': 7, '6': 6, '5': 5, '4': 4, '3': 3, '2': 2 };
     const playerValue = cardValues[playerCard.value];
     const computerValue = cardValues[computerCard.value];
 
     if (playerValue > computerValue) {
       setWinner('Player Wins!');
-      setPlayerDeckCount(prevCount => {
-        const newCount = prevCount + 1;
-        localStorage.setItem("playerDeckCount", newCount);
-        return newCount;
-      });
-      setComputerDeckCount(prevCount => {
-        const newCount = prevCount - 1;
-        localStorage.setItem("computerDeckCount", newCount);
-        return newCount;
-      });
-      updatePlayerPoints(5); // Update points using context function
-      updateGamePoints(5); // Update points using context function
-      
-
+      updateDeckCounts(1, -1); // Player wins, adjust deck counts
+      updatePlayerPoints(5); // Reward player
+      updateGamePoints(5); // Update game points
 
     } else if (playerValue < computerValue) {
       setWinner('Computer Wins!');
-      setPlayerDeckCount(prevCount => {
-        const newCount = prevCount - 1;
-        localStorage.setItem("playerDeckCount", newCount);
-        return newCount;
-      });
-      setComputerDeckCount(prevCount => {
-        const newCount = prevCount + 1;
-        localStorage.setItem("computerDeckCount", newCount);
-        return newCount;
-      });
+      updateDeckCounts(-1, 1); // Computer wins, adjust deck counts
+
     } else {
       setWinner('It\'s a tie!');
     }
 
-    checkGameOver();
-    axios.post('/points/playerPoints/saveOrUpdate', {
-      userId: user.id,
-      playerPoint: newPlayerPoints
-  }).catch(error => console.error('Error updating player points:', error));
+    checkGameOver(); // Check if the game is over after each draw
+  };
 
-  axios.post('/points/gamePoints/saveOrUpdate', {
-      userId: user.id,
-      gamePoint: newGamePoints
-  }).catch(error => console.error('Error updating game points:', error));
+  const updateDeckCounts = (playerChange, computerChange) => {
+    setPlayerDeckCount(prevCount => {
+      const newCount = prevCount + playerChange;
+      localStorage.setItem("playerDeckCount", newCount);
+      return newCount;
+    });
+    setComputerDeckCount(prevCount => {
+      const newCount = prevCount + computerChange;
+      localStorage.setItem("computerDeckCount", newCount);
+      return newCount;
+    });
   };
 
   const checkGameOver = () => {
@@ -140,7 +85,7 @@ const GameOfWar = () => {
     <div>
       <h1>War Card Game</h1>
       <ul>
-        <li>Welcome, {user ? user.email : 'Guest'}!</li> {/* Display user email or a placeholder */}
+        <li>Welcome, {user ? user.email : 'Guest'}!</li>
         <li>Game Points: {gamePoints}</li>
         <li>Player Points: {playerPoints}</li>
       </ul>
@@ -154,28 +99,14 @@ const GameOfWar = () => {
         )}
         {computerCard && (
           <div>
-
-              {playerCard && (
-                  <div>
-                      <h2>{currentUser?.name}'s Card</h2>
-                      <img src={playerCard.image} alt={playerCard.code} />
-                  </div>
-              )}
-              {computerCard && (
-                  <div>
-                      <h2>Computer's Card</h2>
-                      <img src={computerCard.image} alt={computerCard.code} />
-                  </div>
-              )}
+            <h2>Computer's Card</h2>
+            <img src={computerCard.image} alt={computerCard.code} />
           </div>
         )}
       </div>
       <h3>{winner}</h3>
       <h4>Player Deck Count: {playerDeckCount}</h4>
       <h4>Computer Deck Count: {computerDeckCount}</h4>
-      <h4>Player Points: {playerPoints}</h4>
-      <h4>Game Points: {gamePoints}</h4>
-      {/* console.log({gamePoints}, {playerPoints}) */}
     </div>
   );
 };

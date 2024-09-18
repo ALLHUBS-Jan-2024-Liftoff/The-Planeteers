@@ -40,6 +40,54 @@ public class PointController {
     }
 
 
+//    @PostMapping("/gamePoints/saveOrUpdate")
+//    public ResponseEntity<?> saveOrUpdateGamePoints(@RequestBody @Valid PointDTO pointDTO) {
+//        User user = userRepository.findById(pointDTO.getUserId())
+//                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + pointDTO.getUserId()));
+//
+//        GamePoint gamePoint = user.getGamePoint();
+//        if (gamePoint == null) {
+//            gamePoint = new GamePoint();
+//            gamePoint.setUser(user);
+//        }
+//
+//        // Update the gamePoint value
+//        gamePoint.setGamePoint(pointDTO.getGamePoint());
+//
+//        try {
+//            gamePoint = gamePointRepository.save(gamePoint);
+//            user.setGamePoint(gamePoint);
+//            userRepository.save(user);
+//
+//            return new ResponseEntity<>(gamePoint, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+
+
+
+
+
+//    @PostMapping("updatePlayerPoints")
+//    public ResponseEntity<String> updatePlayerPoints(@RequestBody @Valid PointDTO pointDTO, HttpServletRequest request) {
+//        // Extract the JWT token from the request header
+//        String token = request.getHeader("Authorization");
+//        if (token == null || !token.startsWith("Bearer ")) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token not provided");
+//        }
+//        token = token.substring(7); // Remove "Bearer " prefix
+//
+//        try {
+//            // Save player points using the token
+//            pointService.savePlayerPoint(pointDTO, token);
+//            return ResponseEntity.ok("Player points updated successfully.");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
+
     @PostMapping("/gamePoints/saveOrUpdate")
     public ResponseEntity<?> saveOrUpdateGamePoints(@RequestBody @Valid PointDTO pointDTO) {
         User user = userRepository.findById(pointDTO.getUserId())
@@ -66,11 +114,7 @@ public class PointController {
     }
 
 
-
-
-
-
-    @PostMapping("updatePlayerPoints")
+    @PostMapping("/updatePlayerPoints")
     public ResponseEntity<String> updatePlayerPoints(@RequestBody @Valid PointDTO pointDTO, HttpServletRequest request) {
         // Extract the JWT token from the request header
         String token = request.getHeader("Authorization");
@@ -87,28 +131,6 @@ public class PointController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-
-
-
-
-//    @PostMapping("updateGamePoints")
-//    public ResponseEntity<String> updateGamePoints(@RequestBody PointDTO pointDTO) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String email = authentication.getName();
-//        User user = userService.findUserByEmail(email);
-//
-//        if (user == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
-//        }
-//
-//        try {
-//            pointService.saveGamePoint(pointDTO);
-//            return ResponseEntity.ok("Game points updated successfully.");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//        }
-//    }
 
 
 }

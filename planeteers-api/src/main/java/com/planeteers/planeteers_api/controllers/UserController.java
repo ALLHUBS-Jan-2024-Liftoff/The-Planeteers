@@ -206,14 +206,27 @@ public class UserController {
     return userService.currentUser();
     }
 
-    @GetMapping("getcurrentuser")
-    public String getCurrentUser() {
-        // Access the current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserEmail = authentication.getName(); // This will be the email or username
+//    @GetMapping("getcurrentuser")
+//    public String getCurrentUser() {
+//        // Access the current authenticated user
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String currentUserEmail = authentication.getName(); // This will be the email or username
+//
+//        // You can also access other details or authorities if needed
+//        return "Current user: " + currentUserEmail;
+//    }
 
-        // You can also access other details or authorities if needed
-        return "Current user: " + currentUserEmail;
+    @GetMapping("current")
+    public ResponseEntity<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();  // Assuming email is the username
+        User currentUser = userRepository.findByEmail(email);
+
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return ResponseEntity.ok(currentUser);
     }
 
 //    private String getTokenFromHeader(HttpServletRequest request) {

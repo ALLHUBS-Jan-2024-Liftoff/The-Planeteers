@@ -51,7 +51,7 @@ public class User extends AbstractEntity{
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "playerPoint", referencedColumnName = "id")
+    @JoinColumn(name = "player_point_id", referencedColumnName = "id")
     private PlayerPoint playerPoint;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
